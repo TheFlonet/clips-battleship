@@ -303,12 +303,14 @@
 (expected-cell (x 9) (y 9) (content blank))
 )
 
-(defrule fill-cell-from-ground-truth
-	(k-cell (x ?row) (y ?col) (content ?cont))
-	?expcell <- (expected-cell (x ?row) (y ?col) (content ~?cont))
+(defrule fill-water-cell-from-ground-truth
+	?k-cell <- (k-cell (x ?row) (y ?col) (content water))
+	?expcell <- (expected-cell (x ?row) (y ?col))
 =>
-	(modify ?expcell (content ?cont))
+	(modify ?expcell (content water))
+	(retract ?k-cell)
 )
+
 ; TODO: update k-per for each ship correctly positioned.
 
 ; 1 - CORNERS - SUBMARINES (UL - UR - DL - DR)
@@ -557,7 +559,6 @@
 	(modify ?expcell8 (content water))
 )
 
-
 (defrule fill-water-row-when-k-cell-row-is-empty
 	(k-per-row (row ?row) (num 0))
 	?expcell <- (expected-cell (x ?row) (y ?col) (content ~water))
@@ -572,3 +573,160 @@
 	(modify ?expcell (content water))
 )
 
+; rules for placing water if a ground truth boat is in the edges
+
+(defrule fill-water-bottom-edge
+	?k-cell <- (k-cell (x 9) (y ?col &~0 &~9) (content ?cont))
+	?expcell <- (expected-cell (x 9) (y ?col))
+	?expcell-left <- (expected-cell (x 9) (y ?col-1))
+	?expcell-right <- (expected-cell (x 9) (y ?col+1))
+	?expcell-up <- (expected-cell (x 8) (y ?col))
+	?expcell-up-left <- (expected-cell (x 9) (y ?col-1))
+	?expcell-up-right <- (expected-cell (x 9) (y ?col+1))
+=>
+	(if (eq ?cont left) then
+		(modify ?expcell-left (content water))
+		(modify ?expcell-up-left (content water))
+		(modify ?expcell-up (content water))
+		(modify ?expcell-up-right (content water))
+	else (if (eq ?cont right) then
+		(modify ?expcell-right (content water))
+		(modify ?expcell-up-right (content water))
+		(modify ?expcell-up (content water))
+		(modify ?expcell-up-left (content water))
+	else (if (eq ?cont middle) then
+		(modify ?expcell-up-left (content water))
+		(modify ?expcell-up (content water))
+		(modify ?expcell-up-right (content water))
+	else (if (eq ?cont sub) then
+		(modify ?expcell-left (content water))
+		(modify ?expcell-up-left (content water))
+		(modify ?expcell-up (content water))
+		(modify ?expcell-up-right (content water))
+		(modify ?expcell-left (content water))
+	else (if (eq ?cont bot) then
+		(modify ?expcell-left (content water))
+		(modify ?expcell-up-left (content water))
+		(modify ?expcell-up-right (content water))
+		(modify ?expcell-right (content water))
+	)))))
+	(modify ?expcell (content ?cont))
+	(retract ?k-cell)
+)
+
+(defrule fill-water-top-edge
+	?k-cell <- (k-cell (x ?x) (y ?y) (content ?cont))
+	?expcell <- (expected-cell (x 0) (y ?col &~0 &~9))
+	?expcell-left <- (expected-cell (x 0) (y ?col-1))
+	?expcell-right <- (expected-cell (x 0) (y ?col+1))
+	?expcell-bottom <- (expected-cell (x 1) (y ?col))
+	?expcell-bottom-left <- (expected-cell (x 1) (y ?col-1))
+	?expcell-bottom-right <- (expected-cell (x 1) (y ?col+1))
+=>
+	(if (eq ?cont left) then
+		(modify ?expcell-left (content water))
+		(modify ?expcell-bottom-left (content water))
+		(modify ?expcell-bottom (content water))
+		(modify ?expcell-bottom-right (content water))
+	else (if (eq ?cont right) then
+		(modify ?expcell-right (content water))
+		(modify ?expcell-bottom-right (content water))
+		(modify ?expcell-bottom (content water))
+		(modify ?expcell-bottom-left (content water))
+	else (if (eq ?cont middle) then
+		(modify ?expcell-bottom-left (content water))
+		(modify ?expcell-bottom (content water))
+		(modify ?expcell-bottom-right (content water))
+	else (if (eq ?cont sub) then
+		(modify ?expcell-left (content water))
+		(modify ?expcell-bottom-left (content water))
+		(modify ?expcell-bottom (content water))
+		(modify ?expcell-bottom-right (content water))
+		(modify ?expcell-left (content water))
+	else (if (eq ?cont top) then
+		(modify ?expcell-left (content water))
+		(modify ?expcell-bottom-left (content water))
+		(modify ?expcell-bottom-right (content water))
+		(modify ?expcell-right (content water))
+	)))))
+	(modify ?expcell (content ?cont))
+	(retract ?k-cell)
+)
+
+(defrule fill-water-left-edge
+	?k-cell <- (k-cell (x ?x) (y ?y) (content ?cont))
+	?expcell <- (expected-cell (x ?row &~0 &~9) (y 0))
+	?expcell-up <- (expected-cell (x ?row-1) (y 0))
+	?expcell-up-right <- (expected-cell (x ?row-1) (y 1))
+	?expcell-right <- (expected-cell (x ?row) (y 1))
+	?expcell-bottom-right <- (expected-cell (x ?row+1) (y 1))
+	?expcell-bottom <- (expected-cell (x ?row+1) (y 0))
+=>
+	(if (eq ?cont left) then
+		(modify ?expcell-up (content water))
+		(modify ?expcell-up-right (content water))
+		(modify ?expcell-bottom-right (content water))
+		(modify ?expcell-bottom (content water))
+	else (if (eq ?cont middle) then
+		(modify ?expcell-up-right (content water))
+		(modify ?expcell-right (content water))
+		(modify ?expcell-bottom-right (content water))
+	else (if (eq ?cont sub) then
+		(modify ?expcell-up (content water))
+		(modify ?expcell-up-right (content water))
+		(modify ?expcell-right (content water))
+		(modify ?expcell-bottom-right (content water))
+		(modify ?expcell-bottom (content water))
+	else (if (eq ?cont top) then
+		(modify ?expcell-up (content water))
+		(modify ?expcell-up-right (content water))
+		(modify ?expcell-right (content water))
+		(modify ?expcell-bottom-right (content water))
+	else (if (eq ?cont bot) then
+		(modify ?expcell-up-right (content water))
+		(modify ?expcell-right (content water))
+		(modify ?expcell-bottom-right (content water))
+		(modify ?expcell-bottom (content water))
+	)))))
+	(modify ?expcell (content ?cont))
+	(retract ?k-cell)
+)
+
+(defrule fill-water-right-edge
+	?k-cell <- (k-cell (x ?x) (y ?y) (content ?cont))
+	?expcell <- (expected-cell (x ?row &~0 &~9) (y 9))
+	?expcell-up <- (expected-cell (x ?row-1) (y 9))
+	?expcell-up-left <- (expected-cell (x ?row-1) (y 8))
+	?expcell-left <- (expected-cell (x ?row) (y 8))
+	?expcell-bottom-left <- (expected-cell (x ?row+1) (y 8))
+	?expcell-bottom <- (expected-cell (x ?row+1) (y 9))
+=>
+	(if (eq ?cont right) then
+		(modify ?expcell-up (content water))
+		(modify ?expcell-up-left (content water))
+		(modify ?expcell-bottom-left (content water))
+		(modify ?expcell-bottom (content water))
+	else (if (eq ?cont middle) then
+		(modify ?expcell-up-left (content water))
+		(modify ?expcell-left (content water))
+		(modify ?expcell-bottom-left (content water))
+	else (if (eq ?cont sub) then
+		(modify ?expcell-up (content water))
+		(modify ?expcell-up-left (content water))
+		(modify ?expcell-left (content water))
+		(modify ?expcell-bottom-left (content water))
+		(modify ?expcell-bottom (content water))
+	else (if (eq ?cont top) then
+		(modify ?expcell-up (content water))
+		(modify ?expcell-up-left (content water))
+		(modify ?expcell-left (content water))
+		(modify ?expcell-bottom-left (content water))
+	else (if (eq ?cont bot) then
+		(modify ?expcell-up-left (content water))
+		(modify ?expcell-left (content water))
+		(modify ?expcell-bottom-left (content water))
+		(modify ?expcell-bottom (content water))
+	)))))
+	(modify ?expcell (content ?cont))
+	(retract ?k-cell)
+)
