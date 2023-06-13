@@ -311,7 +311,7 @@
 )
 ; TODO: update k-per for each ship correctly positioned.
 
-; 1- CORNERS - SUBMARINES (UL - UR - DL - DR)
+; 1 - CORNERS - SUBMARINES (UL - UR - DL - DR)
 
 (defrule fill-water-ul-corner-when-sub
 	(k-cell (x 0) (y 0) (content sub))
@@ -437,6 +437,125 @@
 	(modify ?expcell3 (content water))
 )
 
+
+; 6 - INTERNAL SLOT - SUBMARINES
+
+(defrule fill-water-internal-slot-when-sub
+	(k-cell (x ?row & ~0 & ~9) (y ?col & ~0 & ~9) (content sub))
+	?expcell1 <- (expected-cell (x ?row-1) (y ?col-1))
+	?expcell2 <- (expected-cell (x ?row-1) (y ?col))
+	?expcell3 <- (expected-cell (x ?row-1) (y ?col+1))
+	?expcell4 <- (expected-cell (x ?row) (y ?col-1))
+	?expcell5 <- (expected-cell (x ?row) (y ?col+1))
+	?expcell6 <- (expected-cell (x ?row+1) (y ?col-1))
+	?expcell7 <- (expected-cell (x ?row+1) (y ?col))
+	?expcell8 <- (expected-cell (x ?row+1) (y ?col+1))
+=>
+	(modify ?expcell1 (content water))
+	(modify ?expcell2 (content water))
+	(modify ?expcell3 (content water))
+	(modify ?expcell4 (content water))
+	(modify ?expcell5 (content water))
+	(modify ?expcell6 (content water))
+	(modify ?expcell7 (content water))
+	(modify ?expcell8 (content water))
+)
+
+; 7 - INTERNAL SLOT - MIDDLE 
+
+(defrule fill-water-internal-slot-when-middle
+	(k-cell (x ?row & ~0 & ~9) (y ?col & ~0 & ~9) (content middle))
+	?expcell1 <- (expected-cell (x ?row-1) (y ?col-1))
+	?expcell3 <- (expected-cell (x ?row-1) (y ?col+1))
+	?expcell6 <- (expected-cell (x ?row+1) (y ?col-1))
+	?expcell8 <- (expected-cell (x ?row+1) (y ?col+1))
+=>
+	(modify ?expcell1 (content water))
+	(modify ?expcell3 (content water))
+	(modify ?expcell6 (content water))
+	(modify ?expcell8 (content water))
+)
+
+; 8 - INTERNAL SLOT - LEFT 
+
+(defrule fill-water-internal-slot-when-left
+	(k-cell (x ?row & ~0 & ~9) (y ?col & ~0 & ~9) (content left))
+	?expcell1 <- (expected-cell (x ?row-1) (y ?col-1))
+	?expcell2 <- (expected-cell (x ?row-1) (y ?col))
+	?expcell3 <- (expected-cell (x ?row-1) (y ?col+1))
+	?expcell4 <- (expected-cell (x ?row) (y ?col-1))
+	?expcell6 <- (expected-cell (x ?row+1) (y ?col-1))
+	?expcell7 <- (expected-cell (x ?row+1) (y ?col))
+	?expcell8 <- (expected-cell (x ?row+1) (y ?col+1))
+=>
+	(modify ?expcell1 (content water))
+	(modify ?expcell2 (content water))
+	(modify ?expcell3 (content water))
+	(modify ?expcell4 (content water))
+	(modify ?expcell6 (content water))
+	(modify ?expcell7 (content water))
+	(modify ?expcell8 (content water))
+)
+; 9 - INTERNAL SLOT - RIGTH 
+
+(defrule fill-water-internal-slot-when-right
+	(k-cell (x ?row & ~0 & ~9) (y ?col & ~0 & ~9) (content right))
+	?expcell1 <- (expected-cell (x ?row-1) (y ?col-1))
+	?expcell2 <- (expected-cell (x ?row-1) (y ?col))
+	?expcell3 <- (expected-cell (x ?row-1) (y ?col+1))
+	?expcell5 <- (expected-cell (x ?row) (y ?col+1))
+	?expcell6 <- (expected-cell (x ?row+1) (y ?col-1))
+	?expcell7 <- (expected-cell (x ?row+1) (y ?col))
+	?expcell8 <- (expected-cell (x ?row+1) (y ?col+1))
+=>
+	(modify ?expcell1 (content water))
+	(modify ?expcell2 (content water))
+	(modify ?expcell3 (content water))
+	(modify ?expcell5 (content water))
+	(modify ?expcell6 (content water))
+	(modify ?expcell7 (content water))
+	(modify ?expcell8 (content water))
+)
+; 10 - INTERNAL SLOT - TOP 
+
+(defrule fill-water-internal-slot-when-top
+	(k-cell (x ?row & ~0 & ~9) (y ?col & ~0 & ~9) (content top))
+	?expcell1 <- (expected-cell (x ?row-1) (y ?col-1))
+	?expcell2 <- (expected-cell (x ?row-1) (y ?col))
+	?expcell3 <- (expected-cell (x ?row-1) (y ?col+1))
+	?expcell4 <- (expected-cell (x ?row) (y ?col-1))
+	?expcell5 <- (expected-cell (x ?row) (y ?col+1))
+	?expcell6 <- (expected-cell (x ?row+1) (y ?col-1))
+	?expcell8 <- (expected-cell (x ?row+1) (y ?col+1))
+=>
+	(modify ?expcell1 (content water))
+	(modify ?expcell2 (content water))
+	(modify ?expcell3 (content water))
+	(modify ?expcell4 (content water))
+	(modify ?expcell5 (content water))
+	(modify ?expcell6 (content water))
+	(modify ?expcell8 (content water))
+)
+; 11 - INTERNAL SLOT - BOTTOM 
+
+(defrule fill-water-internal-slot-when-bot
+	(k-cell (x ?row & ~0 & ~9) (y ?col & ~0 & ~9) (content bot))
+	?expcell1 <- (expected-cell (x ?row-1) (y ?col-1))
+	?expcell3 <- (expected-cell (x ?row-1) (y ?col+1))
+	?expcell4 <- (expected-cell (x ?row) (y ?col-1))
+	?expcell5 <- (expected-cell (x ?row) (y ?col+1))
+	?expcell6 <- (expected-cell (x ?row+1) (y ?col-1))
+	?expcell7 <- (expected-cell (x ?row+1) (y ?col))
+	?expcell8 <- (expected-cell (x ?row+1) (y ?col+1))
+=>
+	(modify ?expcell1 (content water))
+	(modify ?expcell3 (content water))
+	(modify ?expcell4 (content water))
+	(modify ?expcell5 (content water))
+	(modify ?expcell6 (content water))
+	(modify ?expcell7 (content water))
+	(modify ?expcell8 (content water))
+)
 
 
 (defrule fill-water-row-when-k-cell-row-is-empty
