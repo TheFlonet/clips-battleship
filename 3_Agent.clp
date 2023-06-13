@@ -309,6 +309,134 @@
 =>
 	(modify ?expcell (content ?cont))
 )
+; TODO: update k-per for each ship correctly positioned.
+
+; 1- CORNERS - SUBMARINES (UL - UR - DL - DR)
+
+(defrule fill-water-ul-corner-when-sub
+	(k-cell (x 0) (y 0) (content sub))
+	?expcell1 <- (expected-cell (x 0) (y 1))
+	?expcell2 <- (expected-cell (x 1) (y 0))
+	?expcell3 <- (expected-cell (x 1) (y 1))
+=>
+	(modify ?expcell1 (content water))
+	(modify ?expcell2 (content water))
+	(modify ?expcell3 (content water))
+)
+
+(defrule fill-water-ur-corner-when-sub
+	(k-cell (x 0) (y 9) (content sub))
+	?expcell1 <- (expected-cell (x 0) (y 8))
+	?expcell2 <- (expected-cell (x 1) (y 9))
+	?expcell3 <- (expected-cell (x 1) (y 8))
+=>
+	(modify ?expcell1 (content water))
+	(modify ?expcell2 (content water))
+	(modify ?expcell3 (content water))
+)
+
+(defrule fill-water-dl-corner-when-sub
+	(k-cell (x 9) (y 0) (content sub))
+	?expcell1 <- (expected-cell (x 9) (y 1))
+	?expcell2 <- (expected-cell (x 8) (y 0))
+	?expcell3 <- (expected-cell (x 8) (y 1))
+=>
+	(modify ?expcell1 (content water))
+	(modify ?expcell2 (content water))
+	(modify ?expcell3 (content water))
+)
+
+(defrule fill-water-dr-corner-when-sub
+	(k-cell (x 9) (y 9) (content sub))
+	?expcell1 <- (expected-cell (x 9) (y 8))
+	?expcell2 <- (expected-cell (x 8) (y 9))
+	?expcell3 <- (expected-cell (x 8) (y 8))
+=>
+	(modify ?expcell1 (content water))
+	(modify ?expcell2 (content water))
+	(modify ?expcell3 (content water))
+)
+
+; 2 - CORNERS - LEFT PART OF THE SHIP (UL - DL ONLY)
+
+(defrule fill-water-ul-corner-when-left
+	(k-cell (x 0) (y 0) (content left))
+	?expcell2 <- (expected-cell (x 1) (y 0))
+	?expcell3 <- (expected-cell (x 1) (y 1))
+=>
+	(modify ?expcell2 (content water))
+	(modify ?expcell3 (content water))
+)
+
+(defrule fill-water-dl-corner-when-left
+	(k-cell (x 9) (y 0) (content left))
+	?expcell2 <- (expected-cell (x 8) (y 0))
+	?expcell3 <- (expected-cell (x 8) (y 1))
+=>
+	(modify ?expcell2 (content water))
+	(modify ?expcell3 (content water))
+)
+
+; 3 - CORNERS - RIGHT PART OF THE SHIP (UR - DR ONLY)
+
+(defrule fill-water-ur-corner-when-right
+	(k-cell (x 0) (y 9) (content right))
+	?expcell2 <- (expected-cell (x 1) (y 9))
+	?expcell3 <- (expected-cell (x 1) (y 8))
+=>
+	(modify ?expcell2 (content water))
+	(modify ?expcell3 (content water))
+)
+
+(defrule fill-water-dr-corner-when-right
+	(k-cell (x 9) (y 9) (content right))
+	?expcell2 <- (expected-cell (x 8) (y 9))
+	?expcell3 <- (expected-cell (x 8) (y 8))
+=>
+	(modify ?expcell2 (content water))
+	(modify ?expcell3 (content water))
+)
+
+; 4 - CORNERS - TOP PART OF THE SHIP (UL - UR ONLY)
+
+(defrule fill-water-ul-corner-when-top
+	(k-cell (x 0) (y 0) (content top))
+	?expcell1 <- (expected-cell (x 0) (y 1))
+	?expcell3 <- (expected-cell (x 1) (y 1))
+=>
+	(modify ?expcell1 (content water))
+	(modify ?expcell3 (content water))
+)
+
+(defrule fill-water-ur-corner-when-top
+	(k-cell (x 0) (y 9) (content top))
+	?expcell1 <- (expected-cell (x 0) (y 8))
+	?expcell3 <- (expected-cell (x 1) (y 8))
+=>
+	(modify ?expcell1 (content water))
+	(modify ?expcell3 (content water))
+)
+
+; 5 - CORNERS - BOTTOM PART OF THE SHIP (DL - DR ONLY)
+
+(defrule fill-water-dl-corner-when-bot
+	(k-cell (x 9) (y 0) (content bot))
+	?expcell1 <- (expected-cell (x 9) (y 1))
+	?expcell3 <- (expected-cell (x 8) (y 1))
+=>
+	(modify ?expcell1 (content water))
+	(modify ?expcell3 (content water))
+)
+
+(defrule fill-water-dr-corner-when-bot
+	(k-cell (x 9) (y 9) (content bot))
+	?expcell1 <- (expected-cell (x 9) (y 8))
+	?expcell3 <- (expected-cell (x 8) (y 8))
+=>
+	(modify ?expcell1 (content water))
+	(modify ?expcell3 (content water))
+)
+
 
 
 (defrule fill-water-row-when-k-cell-row-is-empty
