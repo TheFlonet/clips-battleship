@@ -307,6 +307,7 @@
 	?k-cell <- (k-cell (x ?row) (y ?col) (content water))
 	?expcell <- (expected-cell (x ?row) (y ?col))
 =>
+	; (printout t "fill-water-cell-from-ground-truth" crlf)
 	(modify ?expcell (content water))
 	(retract ?k-cell)
 )
@@ -318,6 +319,7 @@
 	?otherrowcells <- (expected-cell (x ?row) (y ?diffcol & ~?col))
 	(k-per-row (row ?row) (num ?rownum))
 	=>
+		; (printout t "set-ship-part-or-sub-given-k-cell-and-fill-row-if-k-is-one" crlf)
 		(modify ?expcell (content ?cont))
 		(if (eq ?rownum 1) then
 		(modify ?otherrowcells (content water)))
@@ -329,6 +331,7 @@
 	?othercolcells <- (expected-cell (x ?diffrow & ~?row) (y ?col))
 	(k-per-col (col ?col) (num ?colnum))
 	=>
+		; (printout t "set-ship-part-or-sub-given-k-cell-and-fill-col-if-k-is-one" crlf)
 		(modify ?expcell (content ?cont))
 		(if (eq ?colnum 1) then
 		(modify ?othercolcells (content water)))
@@ -345,6 +348,7 @@
 	?expcell2 <- (expected-cell (x 1) (y 0))
 	?expcell3 <- (expected-cell (x 1) (y 1))
 =>
+	; (printout t "fill-water-ul-corner-when-sub" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
@@ -359,6 +363,7 @@
 	?expcell2 <- (expected-cell (x 1) (y 9))
 	?expcell3 <- (expected-cell (x 1) (y 8))
 =>
+	; (printout t "fill-water-ur-corner-when-sub" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
@@ -373,6 +378,7 @@
 	?expcell2 <- (expected-cell (x 8) (y 0))
 	?expcell3 <- (expected-cell (x 8) (y 1))
 =>
+	; (printout t "fill-water-dl-corner-when-sub" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
@@ -387,6 +393,7 @@
 	?expcell2 <- (expected-cell (x 8) (y 9))
 	?expcell3 <- (expected-cell (x 8) (y 8))
 =>
+	; (printout t "fill-water-dr-corner-when-sub" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
@@ -403,6 +410,7 @@
 	?expcell3 <- (expected-cell (x 1) (y 1))
 	?expcell4 <- (expected-cell (x 1) (y 2))
 =>
+	; (printout t "fill-water-ul-corner-when-left" crlf)
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
 	(modify ?expcell4 (content water))
@@ -417,6 +425,7 @@
 	?expcell3 <- (expected-cell (x 8) (y 1))
 	?expcell4 <- (expected-cell (x 8) (y 2))
 =>
+	; (printout t "fill-water-dl-corner-when-left" crlf)
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
 	(modify ?expcell4 (content water))
@@ -433,6 +442,7 @@
 	?expcell3 <- (expected-cell (x 1) (y 8))
 	?expcell4 <- (expected-cell (x 1) (y 7))
 =>
+	; (printout t "fill-water-ur-corner-when-right" crlf)
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
 	(modify ?expcell4 (content water))
@@ -447,6 +457,7 @@
 	?expcell3 <- (expected-cell (x 8) (y 8))
 	?expcell4 <- (expected-cell (x 8) (y 7))
 =>
+	; (printout t "fill-water-dr-corner-when-right" crlf)
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
 	(modify ?expcell4 (content water))
@@ -463,6 +474,7 @@
 	?expcell3 <- (expected-cell (x 1) (y 1))
 	?expcell4 <- (expected-cell (x 2) (y 1))
 =>
+	; (printout t "fill-water-ul-corner-when-top" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell3 (content water))
 	(modify ?expcell4 (content water))
@@ -477,6 +489,7 @@
 	?expcell3 <- (expected-cell (x 1) (y 8))
 	?expcell4 <- (expected-cell (x 2) (y 8))
 =>
+	; (printout t "fill-water-ur-corner-when-top" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell3 (content water))
 	(modify ?expcell4 (content water))
@@ -493,6 +506,7 @@
 	?expcell3 <- (expected-cell (x 8) (y 1))
 	?expcell4 <- (expected-cell (x 7) (y 1))
 =>
+	; (printout t "fill-water-dl-corner-when-bot" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell3 (content water))
 	(modify ?expcell4 (content water))
@@ -507,6 +521,7 @@
 	?expcell3 <- (expected-cell (x 8) (y 8))
 	?expcell4 <- (expected-cell (x 7) (y 8))
 =>
+	; (printout t "fill-water-dr-corner-when-bot" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell3 (content water))
 	(modify ?expcell4 (content water))
@@ -529,6 +544,7 @@
 	?expcell7 <- (expected-cell (x ?row+1) (y ?col))
 	?expcell8 <- (expected-cell (x ?row+1) (y ?col+1))
 =>
+	; (printout t "fill-water-internal-slot-when-sub" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
@@ -551,6 +567,7 @@
 	?expcell6 <- (expected-cell (x ?row+1) (y ?col-1))
 	?expcell8 <- (expected-cell (x ?row+1) (y ?col+1))
 =>
+	; (printout t "fill-water-internal-slot-when-middle" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell3 (content water))
 	(modify ?expcell6 (content water))
@@ -574,6 +591,7 @@
 	?expcell8 <- (expected-cell (x ?row+1) (y ?col+1))
 	?expcell9 <- (expected-cell (x ?row+1) (y ?col+2))
 =>
+	; (printout t "fill-water-internal-slot-when-left" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
@@ -601,6 +619,7 @@
 	?expcell8 <- (expected-cell (x ?row+1) (y ?col+1))
 	?expcell9 <- (expected-cell (x ?row+1) (y ?col-2))
 =>
+	; (printout t "fill-water-internal-slot-when-right" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
@@ -628,6 +647,7 @@
 	?expcell8 <- (expected-cell (x ?row+2) (y ?col-1))
 	?expcell9 <- (expected-cell (x ?row+2) (y ?col+1))
 =>
+	; (printout t "fill-water-internal-slot-when-top" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
@@ -655,6 +675,7 @@
 	?expcell8 <- (expected-cell (x ?row-2) (y ?col-1))
 	?expcell9 <- (expected-cell (x ?row-2) (y ?col+1))
 =>
+	; (printout t "fill-water-internal-slot-when-bot" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
@@ -670,29 +691,38 @@
 
 ; rules for placing water if a ground truth boat is in the edges
 
-(defrule fill-water-bottom-edge
+(defrule fill-water-south-edge
 	?k-cell <- (k-cell (x 9) (y ?col &~0 &~9) (content ?cont))
 	?expcell <- (expected-cell (x 9) (y ?col))
 	?expcell-left <- (expected-cell (x 9) (y ?col-1))
 	?expcell-right <- (expected-cell (x 9) (y ?col+1))
 	?expcell-up <- (expected-cell (x 8) (y ?col))
-	?expcell-up-left <- (expected-cell (x 9) (y ?col-1))
-	?expcell-up-right <- (expected-cell (x 9) (y ?col+1))
+	?expcell-up-left <- (expected-cell (x 8) (y ?col-1))
+	?expcell-up-two-left <- (expected-cell (x 8) (y ?col-2))
+	?expcell-two-up-left <- (expected-cell (x 7) (y ?col-1))
+	?expcell-up-right <- (expected-cell (x 8) (y ?col+1))
+	?expcell-up-two-right <- (expected-cell (x 8) (y ?col+2))
+	?expcell-two-up-right <- (expected-cell (x 7) (y ?col+1))
 =>
+	; (printout t "fill-water-bottom-edge" crlf)
 	(if (eq ?cont left) then
 		(modify ?expcell-left (content water))
 		(modify ?expcell-up-left (content water))
 		(modify ?expcell-up (content water))
 		(modify ?expcell-up-right (content water))
+		(modify ?expcell-up-two-right (content water))
 	else (if (eq ?cont right) then
 		(modify ?expcell-right (content water))
 		(modify ?expcell-up-right (content water))
 		(modify ?expcell-up (content water))
 		(modify ?expcell-up-left (content water))
+		(modify ?expcell-up-two-left (content water))
 	else (if (eq ?cont middle) then
 		(modify ?expcell-up-left (content water))
 		(modify ?expcell-up (content water))
 		(modify ?expcell-up-right (content water))
+		(modify ?expcell-up-two-left (content water))
+		(modify ?expcell-up-two-right (content water))
 	else (if (eq ?cont sub) then
 		(modify ?expcell-left (content water))
 		(modify ?expcell-up-left (content water))
@@ -704,34 +734,45 @@
 		(modify ?expcell-up-left (content water))
 		(modify ?expcell-up-right (content water))
 		(modify ?expcell-right (content water))
+		(modify ?expcell-two-up-left (content water))
+		(modify ?expcell-two-up-right (content water))
 	)))))
 	(modify ?expcell (content ?cont))
 	(retract ?k-cell)
 )
 
-(defrule fill-water-top-edge
+(defrule fill-water-north-edge
 	?k-cell <- (k-cell (x ?x) (y ?y) (content ?cont))
 	?expcell <- (expected-cell (x 0) (y ?col &~0 &~9))
 	?expcell-left <- (expected-cell (x 0) (y ?col-1))
 	?expcell-right <- (expected-cell (x 0) (y ?col+1))
 	?expcell-bottom <- (expected-cell (x 1) (y ?col))
 	?expcell-bottom-left <- (expected-cell (x 1) (y ?col-1))
+	?expcell-bottom-two-left <- (expected-cell (x 1) (y ?col-2))
+	?expcell-two-bottom-left <- (expected-cell (x 2) (y ?col-1))
 	?expcell-bottom-right <- (expected-cell (x 1) (y ?col+1))
+	?expcell-bottom-two-right <- (expected-cell (x 1) (y ?col+2))
+	?expcell-two-bottom-right <- (expected-cell (x 2) (y ?col+1))
 =>
+	; (printout t "fill-water-top-edge" crlf)
 	(if (eq ?cont left) then
 		(modify ?expcell-left (content water))
 		(modify ?expcell-bottom-left (content water))
 		(modify ?expcell-bottom (content water))
 		(modify ?expcell-bottom-right (content water))
+		(modify ?expcell-bottom-two-right (content water))
 	else (if (eq ?cont right) then
 		(modify ?expcell-right (content water))
 		(modify ?expcell-bottom-right (content water))
 		(modify ?expcell-bottom (content water))
 		(modify ?expcell-bottom-left (content water))
+		(modify ?expcell-bottom-two-left (content water))
 	else (if (eq ?cont middle) then
+		(modify ?expcell-bottom-two-left (content water))
 		(modify ?expcell-bottom-left (content water))
 		(modify ?expcell-bottom (content water))
 		(modify ?expcell-bottom-right (content water))
+		(modify ?expcell-bottom-two-right (content water))
 	else (if (eq ?cont sub) then
 		(modify ?expcell-left (content water))
 		(modify ?expcell-bottom-left (content water))
@@ -741,6 +782,8 @@
 	else (if (eq ?cont top) then
 		(modify ?expcell-left (content water))
 		(modify ?expcell-bottom-left (content water))
+		(modify ?expcell-two-bottom-left (content water))
+		(modify ?expcell-two-bottom-right (content water))
 		(modify ?expcell-bottom-right (content water))
 		(modify ?expcell-right (content water))
 	)))))
@@ -748,24 +791,34 @@
 	(retract ?k-cell)
 )
 
-(defrule fill-water-left-edge
+(defrule fill-water-west-edge
 	?k-cell <- (k-cell (x ?x) (y ?y) (content ?cont))
 	?expcell <- (expected-cell (x ?row &~0 &~9) (y 0))
 	?expcell-up <- (expected-cell (x ?row-1) (y 0))
 	?expcell-up-right <- (expected-cell (x ?row-1) (y 1))
+	?expcell-up-two-right <- (expected-cell (x ?row-1) (y 2))
+	?expcell-two-up-right <- (expected-cell (x ?row-2) (y 1))
 	?expcell-right <- (expected-cell (x ?row) (y 1))
 	?expcell-bottom-right <- (expected-cell (x ?row+1) (y 1))
+	?expcell-bottom-two-right <- (expected-cell (x ?row+1) (y 2))
+	?expcell-two-bottom-right <- (expected-cell (x ?row+2) (y 1))
 	?expcell-bottom <- (expected-cell (x ?row+1) (y 0))
 =>
+	; (printout t "fill-water-left-edge" crlf)
 	(if (eq ?cont left) then
 		(modify ?expcell-up (content water))
 		(modify ?expcell-up-right (content water))
+		(modify ?expcell-up-two-right (content water))
 		(modify ?expcell-bottom-right (content water))
+		(modify ?expcell-bottom-two-right (content water))
 		(modify ?expcell-bottom (content water))
+
 	else (if (eq ?cont middle) then
 		(modify ?expcell-up-right (content water))
+		(modify ?expcell-two-up-right (content water))
 		(modify ?expcell-right (content water))
 		(modify ?expcell-bottom-right (content water))
+		(modify ?expcell-two-bottom-right (content water))
 	else (if (eq ?cont sub) then
 		(modify ?expcell-up (content water))
 		(modify ?expcell-up-right (content water))
@@ -777,34 +830,45 @@
 		(modify ?expcell-up-right (content water))
 		(modify ?expcell-right (content water))
 		(modify ?expcell-bottom-right (content water))
+		(modify ?expcell-two-bottom-right (content water))
 	else (if (eq ?cont bot) then
 		(modify ?expcell-up-right (content water))
 		(modify ?expcell-right (content water))
 		(modify ?expcell-bottom-right (content water))
 		(modify ?expcell-bottom (content water))
+		(modify ?expcell-two-up-right (content water))
 	)))))
 	(modify ?expcell (content ?cont))
 	(retract ?k-cell)
 )
 
-(defrule fill-water-right-edge
+(defrule fill-water-east-edge
 	?k-cell <- (k-cell (x ?x) (y ?y) (content ?cont))
 	?expcell <- (expected-cell (x ?row &~0 &~9) (y 9))
 	?expcell-up <- (expected-cell (x ?row-1) (y 9))
 	?expcell-up-left <- (expected-cell (x ?row-1) (y 8))
+	?expcell-up-two-left <- (expected-cell (x ?row-1) (y 7))
+	?expcell-two-up-left <- (expected-cell (x ?row-2) (y 8))
 	?expcell-left <- (expected-cell (x ?row) (y 8))
 	?expcell-bottom-left <- (expected-cell (x ?row+1) (y 8))
+	?expcell-two-bottom-left <- (expected-cell (x ?row+2) (y 8))
+	?expcell-bottom-two-left <- (expected-cell (x ?row+1) (y 7))
 	?expcell-bottom <- (expected-cell (x ?row+1) (y 9))
 =>
+	; (printout t "fill-water-right-edge" crlf)
 	(if (eq ?cont right) then
 		(modify ?expcell-up (content water))
 		(modify ?expcell-up-left (content water))
+		(modify ?expcell-up-two-left (content water))
+		(modify ?expcell-bottom-two-left (content water))
 		(modify ?expcell-bottom-left (content water))
 		(modify ?expcell-bottom (content water))
 	else (if (eq ?cont middle) then
+		(modify ?expcell-two-up-left (content water))
 		(modify ?expcell-up-left (content water))
 		(modify ?expcell-left (content water))
 		(modify ?expcell-bottom-left (content water))
+		(modify ?expcell-two-bottom-left (content water))
 	else (if (eq ?cont sub) then
 		(modify ?expcell-up (content water))
 		(modify ?expcell-up-left (content water))
@@ -816,7 +880,9 @@
 		(modify ?expcell-up-left (content water))
 		(modify ?expcell-left (content water))
 		(modify ?expcell-bottom-left (content water))
+		(modify ?expcell-two-bottom-left (content water))
 	else (if (eq ?cont bot) then
+		(modify ?expcell-two-up-left (content water))
 		(modify ?expcell-up-left (content water))
 		(modify ?expcell-left (content water))
 		(modify ?expcell-bottom-left (content water))
@@ -831,6 +897,7 @@
 	(k-per-row (row ?row) (num 0))
 	?expcell <- (expected-cell (x ?row) (y ?col) (content blank))
 =>
+	; (printout t "fill-water-row-when-k-cell-row-is-empty" crlf)
 	(modify ?expcell (content water))
 )
 
@@ -838,10 +905,11 @@
 	(k-per-col (col ?col) (num 0))
 	?expcell <- (expected-cell (x ?row) (y ?col) (content blank))
 =>
+	; (printout t "fill-water-column-when-k-cell-col-is-empty" crlf)
 	(modify ?expcell (content water))
 )
 
-(defrule print-what-i-know
+(defrule print-what-i-know (declare (salience -100))
 	(expected-cell (x ?x) (y ?y) (content ?t) )
 =>
 	(printout t "I know that cell [" ?x ", " ?y "] contains " ?t "." crlf)
