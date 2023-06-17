@@ -637,7 +637,7 @@
 (defrule fill-water-internal-slot-when-top
 	?k-cell <- (k-cell (x ?row & ~0 & ~9) (y ?col & ~0 & ~9) (content top))
 	?designed <- (k-cell (x ?row) (y ?col))
-	?expcell1 <- (expected-cell (x ?row-1) (y ?col-1))m
+	?expcell1 <- (expected-cell (x ?row-1) (y ?col-1))
 	?expcell2 <- (expected-cell (x ?row-1) (y ?col))
 	?expcell3 <- (expected-cell (x ?row-1) (y ?col+1))
 	?expcell4 <- (expected-cell (x ?row) (y ?col-1))
@@ -891,8 +891,80 @@
 	(modify ?expcell (content ?cont))
 	(retract ?k-cell)
 )
+; SPECIFIC CASES WHEN A SINGLE PIECE AND K-PER-ROW/COL GIVE OUT THE FULL DISPOSITION
+(defrule fill-water-south-north-when-k-per-row-is-three-and-there-is-middle
+	(expected-cell (x ?x & 0 | 9) (y ?y) (content middle))
+	(k-per-row (row ?x) (num 3))
+	?expcell <- (expected-cell (x ?x) (y ?diffcol))
+=>
+	(if (eq ?diffcol (+ ?y 1)) then
+		(modify ?expcell (content right))
+	else (if (eq ?diffcol (- ?y 1)) then
+		(modify ?expcell (content left))
+	else (if (neq ?diffcol ?y) then
+		(modify ?expcell (content water))
+	)))
+)
 
+(defrule fill-water-east-west-when-k-per-col-is-three-and-there-is-middle
+	(expected-cell (x ?x) (y ?y & 0 | 9) (content middle))
+	(k-per-col (col ?y) (num 3))
+	?expcell <- (expected-cell (x ?diffrow) (y ?y))
+=>
+	(if (eq ?diffrow (+ ?x 1)) then
+		(modify ?expcell (content bot))
+	else (if (eq ?diffrow (- ?x 1)) then
+		(modify ?expcell (content top))
+	else (if (neq ?diffrow ?x) then
+		(modify ?expcell (content water))
+	)))
+)
 
+(defrule fill-water-row-when-k-per-row-is-two-and-there-is-left
+	(expected-cell (x ?x) (y ?y) (content left))
+	(k-per-row (row ?x) (num 2))
+	?expcell <- (expected-cell (x ?row) (y ?diffcol))
+=>
+	(if (eq ?diffcol (+ ?y 1)) then
+		(modify ?expcell (content right))
+	else (if (neq ?diffcol ?y) then
+		(modify ?expcell (content water))))
+)
+
+(defrule fill-water-row-when-k-per-row-is-two-and-there-is-right
+	(expected-cell (x ?x) (y ?y) (content right))
+	(k-per-row (row ?x) (num 2))
+	?expcell <- (expected-cell (x ?row) (y ?diffcol))
+=>
+	(if (eq ?diffcol (- ?y 1)) then
+		(modify ?expcell (content left))
+	else (if (neq ?diffcol ?y) then
+		(modify ?expcell (content water))))
+)
+
+(defrule fill-water-col-when-k-per-col-is-two-and-there-is-top
+	(expected-cell (x ?x) (y ?y) (content top))
+	(k-per-col (col ?y) (num 2))
+	?expcell <- (expected-cell (x ?diffrow) (y ?y))
+=>
+	(if (eq ?diffrow (+ ?x 1)) then
+		(modify ?expcell (content bot))
+	else (if (neq ?diffrow ?x) then
+		(modify ?expcell (content water))))
+)
+
+(defrule fill-water-col-when-k-per-col-is-two-and-there-is-bot
+	(expected-cell (x ?x) (y ?y) (content bot))
+	(k-per-col (col ?y) (num 2))
+	?expcell <- (expected-cell (x ?diffrow) (y ?y))
+=>
+	(if (eq ?diffrow (- ?x 1)) then
+		(modify ?expcell (content top))
+	else (if (neq ?diffrow ?x) then
+		(modify ?expcell (content water))))
+)
+
+; WATER FILLING ON EMPTY ROWS AND COLUMNS
 (defrule fill-water-row-when-k-cell-row-is-empty
 	(k-per-row (row ?row) (num 0))
 	?expcell <- (expected-cell (x ?row) (y ?col) (content blank))
@@ -907,6 +979,26 @@
 =>
 	; (printout t "fill-water-column-when-k-cell-col-is-empty" crlf)
 	(modify ?expcell (content water))
+)
+
+; UPDATABLE CELLS WHEN THERE IS MORE INFORMATION AROUND A MIDDLE PIECE IN THE INTERAL PART OF THE BOARD
+
+(defrule fill-water-around-middle-if-cross-water
+	(expected-cell (x ?row & ~0 & ~9) (y ?col & ~0 & ~9) (content middle))
+	?top-cell <- (expected-cell (x ?row-1) (y ?col) (content ?cont1))
+	?bot-cell <- (expected-cell (x ?row+1) (y ?col) (content ?cont2))
+	?left-cell <- (expected-cell (x ?row) (y ?col-1) (content ?cont3))
+	?right-cell <- (expected-cell (x ?row) (y ?col+1) (content ?cont4))
+	=>
+	(if (eq ?cont1 water) then
+		(modify ?bot-cell (content water))
+	else (if (eq ?cont2 water) then
+		(modify ?top-cell (content water))
+	else (if (eq ?cont3 water) then
+		(modify ?right-cell (content water))
+	else (if (eq ?cont4 water) then
+		(modify ?left-cell (content water))
+	))))
 )
 
 (defrule print-what-i-know (declare (salience -100))
