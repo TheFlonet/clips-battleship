@@ -200,14 +200,6 @@
 	(slot content (allowed-values blank water left right middle top bot sub))
 )
 
-(deftemplate agent-guess
-	(slot x)
-	(slot y)
-	(slot num)
-)
-
-(deftemplate to-guess (slot num))
-
 (deffacts guessed-board
 (expected-cell (x 0) (y 0) (content blank))
 (expected-cell (x 0) (y 1) (content blank))
@@ -309,28 +301,6 @@
 (expected-cell (x 9) (y 7) (content blank))
 (expected-cell (x 9) (y 8) (content blank))
 (expected-cell (x 9) (y 9) (content blank))
-
-(agent-guess (x -1) (y -1) (num 0))
-(agent-guess (x -1) (y -1) (num 1))
-(agent-guess (x -1) (y -1) (num 2))
-(agent-guess (x -1) (y -1) (num 3))
-(agent-guess (x -1) (y -1) (num 4))
-(agent-guess (x -1) (y -1) (num 5))
-(agent-guess (x -1) (y -1) (num 6))
-(agent-guess (x -1) (y -1) (num 7))
-(agent-guess (x -1) (y -1) (num 8))
-(agent-guess (x -1) (y -1) (num 9))
-(agent-guess (x -1) (y -1) (num 10))
-(agent-guess (x -1) (y -1) (num 11))
-(agent-guess (x -1) (y -1) (num 12))
-(agent-guess (x -1) (y -1) (num 13))
-(agent-guess (x -1) (y -1) (num 14))
-(agent-guess (x -1) (y -1) (num 15))
-(agent-guess (x -1) (y -1) (num 16))
-(agent-guess (x -1) (y -1) (num 17))
-(agent-guess (x -1) (y -1) (num 18))
-(agent-guess (x -1) (y -1) (num 19))
-(to-guess (num 0))
 )
 
 (defrule fill-water-cell-from-ground-truth
@@ -947,26 +917,60 @@
 
 ; FASE DI GUESS
 
-(defrule guess-parts-at-side-boat-ends
-	?boat-end <- (expected-cell (x ?row) (y ?col) (content ?cont&top|bot|left|right))
-	?num <- (to-guess (num ?guess-num))
-	; ?next-num <- (+ 1 ?guess-num)
-	?curr <- (agent-guess (num ?guess-num))
-	?next <- (agent-guess (num ?next-num+1))
-=>
-	(printout t ?curr " " ?next crlf)
-	(modify ?curr (x ?row) (y ?col))
-	(if (eq ?cont top) then
-		(modify ?next (x (- ?row 1)) (y ?col))
-	else (if (eq ?cont bot) then
-		(modify ?next (x (+ ?row 1)) (y ?col))
-	else (if (eq ?cont left) then
-		(modify ?next (x ?row) (y (+ ?col 1)))
-	else (if (eq ?cont right) then
-		(modify ?next (x ?row) (y (- ?col 1)))
-	))))
-	(modify ?num (num (+ 2 ?guess-num)))
+(deftemplate agent-guess
+	(slot x)
+	(slot y)
+	(slot num)
 )
+
+(deftemplate to-guess (slot num))
+
+(deffacts guesses
+(agent-guess (x 10) (y 10) (num 0))
+(agent-guess (x 10) (y 10) (num 1))
+(agent-guess (x 10) (y 10) (num 2))
+(agent-guess (x 10) (y 10) (num 3))
+(agent-guess (x 10) (y 10) (num 4))
+(agent-guess (x 10) (y 10) (num 5))
+(agent-guess (x 10) (y 10) (num 6))
+(agent-guess (x 10) (y 10) (num 7))
+(agent-guess (x 10) (y 10) (num 8))
+(agent-guess (x 10) (y 10) (num 9))
+(agent-guess (x 10) (y 10) (num 10))
+(agent-guess (x 10) (y 10) (num 11))
+(agent-guess (x 10) (y 10) (num 12))
+(agent-guess (x 10) (y 10) (num 13))
+(agent-guess (x 10) (y 10) (num 14))
+(agent-guess (x 10) (y 10) (num 15))
+(agent-guess (x 10) (y 10) (num 16))
+(agent-guess (x 10) (y 10) (num 17))
+(agent-guess (x 10) (y 10) (num 18))
+(agent-guess (x 10) (y 10) (num 19))
+(to-guess (num 0))
+)
+
+(defrule guess-known-ship-ends
+	?boat-end <- (expected-cell (x ?row) (y ?col) (content ?cont &top|bot|left|right))
+	(not (agent-guess (x ?row) (y ?col)))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=> 
+	(modify ?curr (x ?row) (y ?col))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule guess-left-side-of-known-ship-ends
+	?boat-end <- (expected-cell (x ?row) (y ?col) (content ?cont &left))
+	(not (agent-guess (x ?row) (y ?col+1)))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=>
+	(printout t "fill guess " ?guess-num crlf)
+	(modify ?curr (x ?row) (y (+ ?col 1)))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+; TODO: add rules for right, top e bot
 
 ; TODO: add rule similar to guess-parts-at-side-boat-ends for middle pieces
 
