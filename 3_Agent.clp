@@ -1367,10 +1367,10 @@
 (to-guess (num 0))
 )
 
-(defrule guess-known-ship-ends
+(defrule guess-known-ship
 	?boat-end <- (expected-cell (x ?row) (y ?col) (content ?cont &~water &~blank))
 	(not (agent-guess (x ?row) (y ?col)))
-	?num <- (to-guess (num ?guess-num&:(< ?guess-num 20))) ;boh
+	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 => 
 	(modify ?curr (x ?row) (y ?col))
@@ -1380,7 +1380,7 @@
 (defrule guess-side-of-known-left-ends
 	?boat-end <- (expected-cell (x ?row) (y ?col) (content left))
 	(not (agent-guess (x ?row) (y ?y&:(eq ?y (+ ?col 1)))))
-	?num <- (to-guess (num ?guess-num&:(< ?guess-num 20)))
+	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
 	(modify ?curr (x ?row) (y (+ ?col 1)))
@@ -1390,7 +1390,7 @@
 (defrule guess-side-of-known-right-ends
 	?boat-end <- (expected-cell (x ?row) (y ?col) (content right))
 	(not (agent-guess (x ?row) (y ?y&:(eq ?y (- ?col 1)))))
-	?num <- (to-guess (num ?guess-num&:(< ?guess-num 20)))
+	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
 	(modify ?curr (x ?row) (y (- ?col 1)))
@@ -1400,7 +1400,7 @@
 (defrule guess-side-of-known-top-ends
 	?boat-end <- (expected-cell (x ?row) (y ?col) (content top))
 	(not (agent-guess (x ?x&:(eq ?x (+ ?row 1))) (y ?col)))
-	?num <- (to-guess (num ?guess-num&:(< ?guess-num 20)))
+	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
 	(modify ?curr (x (+ ?row 1)) (y ?col))
@@ -1410,37 +1410,69 @@
 (defrule guess-side-of-known-bot-ends
 	?boat-end <- (expected-cell (x ?row) (y ?col) (content bot))
 	(not (agent-guess (x ?x&:(eq ?x (- ?row 1))) (y ?col)))
-	?num <- (to-guess (num ?guess-num&:(< ?guess-num 20)))
+	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
 	(modify ?curr (x (- ?row 1)) (y ?col))
 	(modify ?num (num (+ 1 ?guess-num)))
 )
 
-(defrule guess-side-of-middle-pieces-on-north-south-edge
+(defrule guess-left-side-of-middle-pieces-on-north-south-edge
 	?boat <- (expected-cell (x ?row &0|9) (y ?col) (content middle))
-	(not (agent-guess (x ?row) (y ?y&:(eq ?y (+ ?col 1)))))
 	(not (agent-guess (x ?row) (y ?y&:(eq ?y (- ?col 1)))))
-	?num <- (to-guess (num ?guess-num&:(< ?guess-num 20)))
+	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
-	?next <- (agent-guess (num ?next-num&:(eq ?next-num (+ ?guess-num 1))))
 =>
 	(modify ?curr (x ?row) (y (- ?col 1)))
-	(modify ?next (x ?row) (y (+ ?col 1)))
-	(modify ?num (num (+ 2 ?guess-num)))
+	(modify ?num (num (+ 1 ?guess-num)))
 )
 
-(defrule guess-side-of-middle-pieces-on-east-west-edge
-	?boat <- (expected-cell (x ?row) (y ?col &0|9) (content middle))
-	(not (agent-guess (x ?x&:(eq ?x (+ ?row 1))) (y ?col)))
-	(not (agent-guess (x ?x&:(eq ?x (- ?row 1))) (y ?col))) 
-	?num <- (to-guess (num ?guess-num&:(< ?guess-num 20)))
+(defrule guess-right-side-of-middle-pieces-on-north-south-edge
+	?boat <- (expected-cell (x ?row &0|9) (y ?col) (content middle))
+	(not (agent-guess (x ?row) (y ?y&:(eq ?y (+ ?col 1)))))
+	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
-	?next <- (agent-guess (num ?next-num&:(eq ?next-num (+ ?guess-num 1))))
+=>
+	(modify ?curr (x ?row) (y (+ ?col 1)))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule guess-top-side-of-middle-pieces-on-east-west-edge
+	?boat <- (expected-cell (x ?row) (y ?col &0|9) (content middle))
+	(not (agent-guess (x ?x&:(eq ?x (- ?row 1))) (y ?col))) 
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
 =>
 	(modify ?curr (x (- ?row 1)) (y ?col))
-	(modify ?next (x (+ ?row 1)) (y ?col))
-	(modify ?num (num (+ 2 ?guess-num)))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule guess-bottom-side-of-middle-pieces-on-east-west-edge
+	?boat <- (expected-cell (x ?row) (y ?col &0|9) (content middle))
+	(not (agent-guess (x ?x&:(eq ?x (+ ?row 1))) (y ?col)))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=>
+	(modify ?curr (x (+ ?row 1)) (y ?col))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule call-guess (declare (salience -200))
+	(agent-guess (x ?x &~-1) (y ?y &~-1))
+  	(status (step ?s)(currently running))
+	(not (exec  (action guess) (x ?x) (y ?y)))
+  	(not (moves (guesses 0)))
+=>
+	(assert (exec (step ?s) (action guess) (x ?x) (y ?y)))
+  	(pop-focus)
+)
+
+(defrule call-solve (declare (salience -300))
+	(to-guess (num 20))
+	(status (step ?s) (currently running))
+=>
+	(assert (exec (step ?s) (action solve)))
+	(pop-focus)
 )
 
 (defrule print-guesses (declare (salience -100))
