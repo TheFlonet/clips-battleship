@@ -1169,12 +1169,14 @@
 )
 
 ; SPECIFIC CASES WHEN A SINGLE PIECE AND K-PER-ROW/COL GIVE OUT THE FULL DISPOSITION
-(defrule fill-water-south-north-when-k-per-row-is-three-and-there-is-middle
-	(expected-cell (x ?x & 0 | 9) (y ?y) (content middle))
+(defrule fill-water-north-when-k-per-row-is-three-and-there-is-middle
+	(expected-cell (x ?x & 0) (y ?y) (content middle))
 	(k-per-row (row ?x) (num 3))
 	?expcell <- (expected-cell (x ?x) (y ?diffcol))
+	?expcell-down <- (expected-cell (x ?x2&:(eq ?x2 (+ ?x 1))) (y ?y))
 =>
-	(printout t "fill-water-south-north-when-k-per-row-is-three-and-there-is-middle" crlf)
+	(printout t "fill-water-north-when-k-per-row-is-three-and-there-is-middle" crlf)
+	(modify ?expcell-down (content water))
 	(if (eq ?diffcol (+ ?y 1)) then
 		(modify ?expcell (content right))
 	else (if (eq ?diffcol (- ?y 1)) then
@@ -1184,12 +1186,49 @@
 	)))
 )
 
-(defrule fill-water-east-west-when-k-per-col-is-three-and-there-is-middle
-	(expected-cell (x ?x) (y ?y & 0 | 9) (content middle))
+(defrule fill-water-south-when-k-per-row-is-three-and-there-is-middle
+	(expected-cell (x ?x & 9) (y ?y) (content middle))
+	(k-per-row (row ?x) (num 3))
+	?expcell <- (expected-cell (x ?x) (y ?diffcol))
+	?expcell-top <- (expected-cell (x ?x2&:(eq ?x2 (- ?x 1))) (y ?y))
+=>
+	(printout t "fill-water-south-when-k-per-row-is-three-and-there-is-middle" crlf)
+	(modify ?expcell-top (content water))
+	(if (eq ?diffcol (+ ?y 1)) then
+		(modify ?expcell (content right))
+	else (if (eq ?diffcol (- ?y 1)) then
+		(modify ?expcell (content left))
+	else (if (neq ?diffcol ?y) then
+		(modify ?expcell (content water))
+	)))
+)
+
+
+(defrule fill-water-west-when-k-per-col-is-three-and-there-is-middle
+	(expected-cell (x ?x) (y ?y & 0) (content middle))
 	(k-per-col (col ?y) (num 3))
 	?expcell <- (expected-cell (x ?diffrow) (y ?y))
+	?expcell-right <- (expected-cell (x ?x) (y ?y2&:(eq ?y2 (+ ?y 1))))
 =>
-	(printout t "fill-water-east-west-when-k-per-col-is-three-and-there-is-middle" crlf)
+	(printout t "fill-water-west-when-k-per-col-is-three-and-there-is-middle" crlf)
+	(modify ?expcell-right (content water))
+	(if (eq ?diffrow (+ ?x 1)) then
+		(modify ?expcell (content bot))
+	else (if (eq ?diffrow (- ?x 1)) then
+		(modify ?expcell (content top))
+	else (if (neq ?diffrow ?x) then
+		(modify ?expcell (content water))
+	)))
+)
+
+(defrule fill-water-east-when-k-per-col-is-three-and-there-is-middle
+	(expected-cell (x ?x) (y ?y & 9) (content middle))
+	(k-per-col (col ?y) (num 3))
+	?expcell <- (expected-cell (x ?diffrow) (y ?y))
+	?expcell-left <- (expected-cell (x ?x) (y ?y2&:(eq ?y2 (- ?y 1))))
+=>
+	(printout t "fill-water-east-when-k-per-col-is-three-and-there-is-middle" crlf)
+	(modify ?expcell-left (content water))
 	(if (eq ?diffrow (+ ?x 1)) then
 		(modify ?expcell (content bot))
 	else (if (eq ?diffrow (- ?x 1)) then
@@ -1329,9 +1368,9 @@
 )
 
 (defrule guess-known-ship-ends
-	?boat-end <- (expected-cell (x ?row) (y ?col) (content ?cont &top|bot|left|right|middle|sub))
+	?boat-end <- (expected-cell (x ?row) (y ?col) (content ?cont &~water &~blank))
 	(not (agent-guess (x ?row) (y ?col)))
-	?num <- (to-guess (num ?guess-num&:(< ?guess-num 20)))
+	?num <- (to-guess (num ?guess-num&:(< ?guess-num 20))) ;boh
 	?curr <- (agent-guess (num ?guess-num))
 => 
 	(modify ?curr (x ?row) (y ?col))
