@@ -3,197 +3,6 @@
 ;  ---------------------------------------------
 (defmodule AGENT (import MAIN ?ALL) (import ENV ?ALL) (export ?ALL))
 
-
-
-
-; (defrule inerzia0 (declare (salience 10))
-; 	(status (step ?s)(currently running))
-; 	(moves (fires 0) (guesses ?ng&:(> ?ng 0)))
-; =>
-; 	(assert (exec (step ?s) (action guess) (x 0) (y 0)))
-;      (pop-focus)
-
-; )
-
-; (defrule inerzia0-bis (declare (salience 10))
-; 	(status (step ?s)(currently running))
-; 	(moves (guesses 0))
-; =>
-; 	(assert (exec (step ?s) (action unguess) (x 0) (y 0)))
-;      (pop-focus)
-
-; )
-
-
-
-; (defrule inerzia
-; 	(status (step ?s)(currently running))
-; 	(not (exec  (action fire) (x 2) (y 4)) )
-; =>
-; 	(assert (exec (step ?s) (action fire) (x 2) (y 4)))
-;      (pop-focus)
-
-; )
-
-; (defrule inerzia1
-; 	(status (step ?s)(currently running))
-; 	(not (exec  (action fire) (x 2) (y 5)))
-; =>
-
-
-; 	(assert (exec (step ?s) (action fire) (x 2) (y 5)))
-;      (pop-focus)
-
-; )
-
-; (defrule inerzia2
-; 	(status (step ?s)(currently running))
-; 	(not (exec  (action fire) (x 2) (y 6)))
-
-; =>
-
-; 	(assert (exec (step ?s) (action fire) (x 2) (y 6)))
-;      (pop-focus)
-
-; )
-
-; (defrule inerzia3
-; 	(status (step ?s)(currently running))
-; 	(not (exec  (action fire) (x 1) (y 2)))
-
-; =>
-; 	(assert (exec (step ?s) (action fire) (x 1) (y 2)))
-;      (pop-focus)
-; )
-
-
-; (defrule inerzia4
-; 	(status (step ?s)(currently running))
-; 	(not (exec (action fire) (x 7) (y 5)))
-; =>
-
-; 	(assert (exec (step ?s) (action fire) (x 7) (y 5)))
-;      (pop-focus)
-
-
-
-; )
-
-; (defrule inerzia5
-; 	(status (step ?s)(currently running))
-
-; 	(not (exec (action fire) (x 8) (y 3)))
-; =>
-
-
-
-; 	(assert (exec (step ?s) (action fire) (x 8) (y 3)))
-;      (pop-focus)
-
-
-; )
-
-
-; (defrule inerzia6
-; 	(status (step ?s)(currently running))
-; 		(not (exec  (action fire) (x 8) (y 4)))
-; =>
-
-
-; 	(assert (exec (step ?s) (action fire) (x 8) (y 4)))
-;      (pop-focus)
-
-; 	)
-
-
-
-
-
-; (defrule inerzia7
-; 	(status (step ?s)(currently running))
-; 		(not (exec  (action fire) (x 8) (y 5)))
-; =>
-
-
-; 	(assert (exec (step ?s) (action fire) (x 8) (y 5)))
-;      (pop-focus)
-
-; )
-
-
-; (defrule inerzia8
-; 	(status (step ?s)(currently running))
-; 		(not (exec  (action fire) (x 6) (y 9)))
-; =>
-
-
-; 	(assert (exec (step ?s) (action fire) (x 6) (y 9)))
-;      (pop-focus)
-; )
-
-
-; (defrule inerzia9
-; 	(status (step ?s)(currently running))
-; 		(not (exec  (action fire) (x 7) (y 9)))
-; =>
-
-
-; 	(assert (exec (step ?s) (action fire) (x 7) (y 9)))
-;      (pop-focus)
-; )
-
-; (defrule inerzia10 (declare (salience 30))
-; 	(status (step ?s)(currently running))
-; 		(not (exec  (action fire) (x 6) (y 4)))
-; =>
-
-
-; 	(assert (exec (step ?s) (action fire) (x 6) (y 4)))
-;      (pop-focus)
-; )
-
-; (defrule inerzia11 (declare (salience 30))
-; 	(status (step ?s)(currently running))
-; 		(not (exec  (action guess) (x 7) (y 7)))
-; =>
-
-
-; 	(assert (exec (step ?s) (action guess) (x 7) (y 7)))
-;      (pop-focus)
-; )
-
-
-; (defrule inerzia20 (declare (salience 30))
-; 	(status (step ?s)(currently running))
-; 	(not (exec  (action guess) (x 1) (y 3)))
-; =>
-
-
-; 	(assert (exec (step ?s) (action guess) (x 1) (y 3)))
-;      (pop-focus)
-
-; )
-
-; (defrule inerzia21  (declare (salience 30))
-; 	(status (step ?s)(currently running))
-; 	(not (exec  (action guess) (x 1) (y 4)))
-; =>
-
-
-; 	(assert (exec (step ?s) (action guess) (x 1) (y 4)))
-;      (pop-focus)
-
-; )
-
-
-; (defrule print-what-i-know-since-the-beginning
-; 	(k-cell (x ?x) (y ?y) (content ?t) )
-; =>
-; 	(printout t "I know that cell [" ?x ", " ?y "] contains " ?t "." crlf)
-; )
-
-
-
 (deftemplate expected-cell 
 	(slot x)
 	(slot y)
@@ -201,113 +10,113 @@
 )
 
 (deffacts guessed-board
-(expected-cell (x 0) (y 0) (content blank))
-(expected-cell (x 0) (y 1) (content blank))
-(expected-cell (x 0) (y 2) (content blank))
-(expected-cell (x 0) (y 3) (content blank))
-(expected-cell (x 0) (y 4) (content blank))
-(expected-cell (x 0) (y 5) (content blank))
-(expected-cell (x 0) (y 6) (content blank))
-(expected-cell (x 0) (y 7) (content blank))
-(expected-cell (x 0) (y 8) (content blank))
-(expected-cell (x 0) (y 9) (content blank))
-(expected-cell (x 1) (y 0) (content blank))
-(expected-cell (x 1) (y 1) (content blank))
-(expected-cell (x 1) (y 2) (content blank))
-(expected-cell (x 1) (y 3) (content blank))
-(expected-cell (x 1) (y 4) (content blank))
-(expected-cell (x 1) (y 5) (content blank))
-(expected-cell (x 1) (y 6) (content blank))
-(expected-cell (x 1) (y 7) (content blank))
-(expected-cell (x 1) (y 8) (content blank))
-(expected-cell (x 1) (y 9) (content blank))
-(expected-cell (x 2) (y 0) (content blank))
-(expected-cell (x 2) (y 1) (content blank))
-(expected-cell (x 2) (y 2) (content blank))
-(expected-cell (x 2) (y 3) (content blank))
-(expected-cell (x 2) (y 4) (content blank))
-(expected-cell (x 2) (y 5) (content blank))
-(expected-cell (x 2) (y 6) (content blank))
-(expected-cell (x 2) (y 7) (content blank))
-(expected-cell (x 2) (y 8) (content blank))
-(expected-cell (x 2) (y 9) (content blank))
-(expected-cell (x 3) (y 0) (content blank))
-(expected-cell (x 3) (y 1) (content blank))
-(expected-cell (x 3) (y 2) (content blank))
-(expected-cell (x 3) (y 3) (content blank))
-(expected-cell (x 3) (y 4) (content blank))
-(expected-cell (x 3) (y 5) (content blank))
-(expected-cell (x 3) (y 6) (content blank))
-(expected-cell (x 3) (y 7) (content blank))
-(expected-cell (x 3) (y 8) (content blank))
-(expected-cell (x 3) (y 9) (content blank))
-(expected-cell (x 4) (y 0) (content blank))
-(expected-cell (x 4) (y 1) (content blank))
-(expected-cell (x 4) (y 2) (content blank))
-(expected-cell (x 4) (y 3) (content blank))
-(expected-cell (x 4) (y 4) (content blank))
-(expected-cell (x 4) (y 5) (content blank))
-(expected-cell (x 4) (y 6) (content blank))
-(expected-cell (x 4) (y 7) (content blank))
-(expected-cell (x 4) (y 8) (content blank))
-(expected-cell (x 4) (y 9) (content blank))
-(expected-cell (x 5) (y 0) (content blank))
-(expected-cell (x 5) (y 1) (content blank))
-(expected-cell (x 5) (y 2) (content blank))
-(expected-cell (x 5) (y 3) (content blank))
-(expected-cell (x 5) (y 4) (content blank))
-(expected-cell (x 5) (y 5) (content blank))
-(expected-cell (x 5) (y 6) (content blank))
-(expected-cell (x 5) (y 7) (content blank))
-(expected-cell (x 5) (y 8) (content blank))
-(expected-cell (x 5) (y 9) (content blank))
-(expected-cell (x 6) (y 0) (content blank))
-(expected-cell (x 6) (y 1) (content blank))
-(expected-cell (x 6) (y 2) (content blank))
-(expected-cell (x 6) (y 3) (content blank))
-(expected-cell (x 6) (y 4) (content blank))
-(expected-cell (x 6) (y 5) (content blank))
-(expected-cell (x 6) (y 6) (content blank))
-(expected-cell (x 6) (y 7) (content blank))
-(expected-cell (x 6) (y 8) (content blank))
-(expected-cell (x 6) (y 9) (content blank))
-(expected-cell (x 7) (y 0) (content blank))
-(expected-cell (x 7) (y 1) (content blank))
-(expected-cell (x 7) (y 2) (content blank))
-(expected-cell (x 7) (y 3) (content blank))
-(expected-cell (x 7) (y 4) (content blank))
-(expected-cell (x 7) (y 5) (content blank))
-(expected-cell (x 7) (y 6) (content blank))
-(expected-cell (x 7) (y 7) (content blank))
-(expected-cell (x 7) (y 8) (content blank))
-(expected-cell (x 7) (y 9) (content blank))
-(expected-cell (x 8) (y 0) (content blank))
-(expected-cell (x 8) (y 1) (content blank))
-(expected-cell (x 8) (y 2) (content blank))
-(expected-cell (x 8) (y 3) (content blank))
-(expected-cell (x 8) (y 4) (content blank))
-(expected-cell (x 8) (y 5) (content blank))
-(expected-cell (x 8) (y 6) (content blank))
-(expected-cell (x 8) (y 7) (content blank))
-(expected-cell (x 8) (y 8) (content blank))
-(expected-cell (x 8) (y 9) (content blank))
-(expected-cell (x 9) (y 0) (content blank))
-(expected-cell (x 9) (y 1) (content blank))
-(expected-cell (x 9) (y 2) (content blank))
-(expected-cell (x 9) (y 3) (content blank))
-(expected-cell (x 9) (y 4) (content blank))
-(expected-cell (x 9) (y 5) (content blank))
-(expected-cell (x 9) (y 6) (content blank))
-(expected-cell (x 9) (y 7) (content blank))
-(expected-cell (x 9) (y 8) (content blank))
-(expected-cell (x 9) (y 9) (content blank))
+	(expected-cell (x 0) (y 0) (content blank))
+	(expected-cell (x 0) (y 1) (content blank))
+	(expected-cell (x 0) (y 2) (content blank))
+	(expected-cell (x 0) (y 3) (content blank))
+	(expected-cell (x 0) (y 4) (content blank))
+	(expected-cell (x 0) (y 5) (content blank))
+	(expected-cell (x 0) (y 6) (content blank))
+	(expected-cell (x 0) (y 7) (content blank))
+	(expected-cell (x 0) (y 8) (content blank))
+	(expected-cell (x 0) (y 9) (content blank))
+	(expected-cell (x 1) (y 0) (content blank))
+	(expected-cell (x 1) (y 1) (content blank))
+	(expected-cell (x 1) (y 2) (content blank))
+	(expected-cell (x 1) (y 3) (content blank))
+	(expected-cell (x 1) (y 4) (content blank))
+	(expected-cell (x 1) (y 5) (content blank))
+	(expected-cell (x 1) (y 6) (content blank))
+	(expected-cell (x 1) (y 7) (content blank))
+	(expected-cell (x 1) (y 8) (content blank))
+	(expected-cell (x 1) (y 9) (content blank))
+	(expected-cell (x 2) (y 0) (content blank))
+	(expected-cell (x 2) (y 1) (content blank))
+	(expected-cell (x 2) (y 2) (content blank))
+	(expected-cell (x 2) (y 3) (content blank))
+	(expected-cell (x 2) (y 4) (content blank))
+	(expected-cell (x 2) (y 5) (content blank))
+	(expected-cell (x 2) (y 6) (content blank))
+	(expected-cell (x 2) (y 7) (content blank))
+	(expected-cell (x 2) (y 8) (content blank))
+	(expected-cell (x 2) (y 9) (content blank))
+	(expected-cell (x 3) (y 0) (content blank))
+	(expected-cell (x 3) (y 1) (content blank))
+	(expected-cell (x 3) (y 2) (content blank))
+	(expected-cell (x 3) (y 3) (content blank))
+	(expected-cell (x 3) (y 4) (content blank))
+	(expected-cell (x 3) (y 5) (content blank))
+	(expected-cell (x 3) (y 6) (content blank))
+	(expected-cell (x 3) (y 7) (content blank))
+	(expected-cell (x 3) (y 8) (content blank))
+	(expected-cell (x 3) (y 9) (content blank))
+	(expected-cell (x 4) (y 0) (content blank))
+	(expected-cell (x 4) (y 1) (content blank))
+	(expected-cell (x 4) (y 2) (content blank))
+	(expected-cell (x 4) (y 3) (content blank))
+	(expected-cell (x 4) (y 4) (content blank))
+	(expected-cell (x 4) (y 5) (content blank))
+	(expected-cell (x 4) (y 6) (content blank))
+	(expected-cell (x 4) (y 7) (content blank))
+	(expected-cell (x 4) (y 8) (content blank))
+	(expected-cell (x 4) (y 9) (content blank))
+	(expected-cell (x 5) (y 0) (content blank))
+	(expected-cell (x 5) (y 1) (content blank))
+	(expected-cell (x 5) (y 2) (content blank))
+	(expected-cell (x 5) (y 3) (content blank))
+	(expected-cell (x 5) (y 4) (content blank))
+	(expected-cell (x 5) (y 5) (content blank))
+	(expected-cell (x 5) (y 6) (content blank))
+	(expected-cell (x 5) (y 7) (content blank))
+	(expected-cell (x 5) (y 8) (content blank))
+	(expected-cell (x 5) (y 9) (content blank))
+	(expected-cell (x 6) (y 0) (content blank))
+	(expected-cell (x 6) (y 1) (content blank))
+	(expected-cell (x 6) (y 2) (content blank))
+	(expected-cell (x 6) (y 3) (content blank))
+	(expected-cell (x 6) (y 4) (content blank))
+	(expected-cell (x 6) (y 5) (content blank))
+	(expected-cell (x 6) (y 6) (content blank))
+	(expected-cell (x 6) (y 7) (content blank))
+	(expected-cell (x 6) (y 8) (content blank))
+	(expected-cell (x 6) (y 9) (content blank))
+	(expected-cell (x 7) (y 0) (content blank))
+	(expected-cell (x 7) (y 1) (content blank))
+	(expected-cell (x 7) (y 2) (content blank))
+	(expected-cell (x 7) (y 3) (content blank))
+	(expected-cell (x 7) (y 4) (content blank))
+	(expected-cell (x 7) (y 5) (content blank))
+	(expected-cell (x 7) (y 6) (content blank))
+	(expected-cell (x 7) (y 7) (content blank))
+	(expected-cell (x 7) (y 8) (content blank))
+	(expected-cell (x 7) (y 9) (content blank))
+	(expected-cell (x 8) (y 0) (content blank))
+	(expected-cell (x 8) (y 1) (content blank))
+	(expected-cell (x 8) (y 2) (content blank))
+	(expected-cell (x 8) (y 3) (content blank))
+	(expected-cell (x 8) (y 4) (content blank))
+	(expected-cell (x 8) (y 5) (content blank))
+	(expected-cell (x 8) (y 6) (content blank))
+	(expected-cell (x 8) (y 7) (content blank))
+	(expected-cell (x 8) (y 8) (content blank))
+	(expected-cell (x 8) (y 9) (content blank))
+	(expected-cell (x 9) (y 0) (content blank))
+	(expected-cell (x 9) (y 1) (content blank))
+	(expected-cell (x 9) (y 2) (content blank))
+	(expected-cell (x 9) (y 3) (content blank))
+	(expected-cell (x 9) (y 4) (content blank))
+	(expected-cell (x 9) (y 5) (content blank))
+	(expected-cell (x 9) (y 6) (content blank))
+	(expected-cell (x 9) (y 7) (content blank))
+	(expected-cell (x 9) (y 8) (content blank))
+	(expected-cell (x 9) (y 9) (content blank))
 )
 
 (defrule fill-water-cell-from-ground-truth
 	?k-cell <- (k-cell (x ?row) (y ?col) (content water))
 	?expcell <- (expected-cell (x ?row) (y ?col))
 =>
-	(printout  t "fill-water-cell-from-ground-truth" crlf)
+	;(printout  t "fill-water-cell-from-ground-truth" crlf)
 	(modify ?expcell (content water))
 	(retract ?k-cell)
 )
@@ -318,11 +127,11 @@
 	?expcell <- (expected-cell (x ?row) (y ?col))
 	?otherrowcells <- (expected-cell (x ?row) (y ?diffcol & ~?col))
 	(k-per-row (row ?row) (num ?rownum))
-	=>
-		(printout  t "set-ship-part-or-sub-given-k-cell-and-fill-row-if-k-is-one" crlf)
-		(modify ?expcell (content ?cont))
-		(if (eq ?rownum 1) then
-		(modify ?otherrowcells (content water)))
+=>
+	;(printout  t "set-ship-part-or-sub-given-k-cell-and-fill-row-if-k-is-one" crlf)
+	(modify ?expcell (content ?cont))
+	(if (eq ?rownum 1) then
+	(modify ?otherrowcells (content water)))
 )
 
 (defrule set-ship-part-or-sub-given-k-cell-and-fill-col-if-k-is-one (declare (salience 1))
@@ -330,11 +139,11 @@
 	?expcell <- (expected-cell (x ?row) (y ?col))
 	?othercolcells <- (expected-cell (x ?diffrow & ~?row) (y ?col))
 	(k-per-col (col ?col) (num ?colnum))
-	=>
-		(printout  t "set-ship-part-or-sub-given-k-cell-and-fill-col-if-k-is-one" crlf)
-		(modify ?expcell (content ?cont))
-		(if (eq ?colnum 1) then
-		(modify ?othercolcells (content water)))
+=>
+	;(printout  t "set-ship-part-or-sub-given-k-cell-and-fill-col-if-k-is-one" crlf)
+	(modify ?expcell (content ?cont))
+	(if (eq ?colnum 1) then
+	(modify ?othercolcells (content water)))
 )
 
 
@@ -348,7 +157,7 @@
 	?expcell2 <- (expected-cell (x 1) (y 0))
 	?expcell3 <- (expected-cell (x 1) (y 1))
 =>
-	(printout  t "fill-water-ul-corner-when-sub" crlf)
+	;(printout  t "fill-water-ul-corner-when-sub" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
@@ -363,7 +172,7 @@
 	?expcell2 <- (expected-cell (x 1) (y 9))
 	?expcell3 <- (expected-cell (x 1) (y 8))
 =>
-	(printout  t "fill-water-ur-corner-when-sub" crlf)
+	;(printout  t "fill-water-ur-corner-when-sub" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
@@ -378,7 +187,7 @@
 	?expcell2 <- (expected-cell (x 8) (y 0))
 	?expcell3 <- (expected-cell (x 8) (y 1))
 =>
-	(printout  t "fill-water-dl-corner-when-sub" crlf)
+	;(printout  t "fill-water-dl-corner-when-sub" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
@@ -393,7 +202,7 @@
 	?expcell2 <- (expected-cell (x 8) (y 9))
 	?expcell3 <- (expected-cell (x 8) (y 8))
 =>
-	(printout  t "fill-water-dr-corner-when-sub" crlf)
+	;(printout  t "fill-water-dr-corner-when-sub" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
@@ -410,7 +219,7 @@
 	?expcell3 <- (expected-cell (x 1) (y 1))
 	?expcell4 <- (expected-cell (x 1) (y 2))
 =>
-	(printout  t "fill-water-ul-corner-when-left" crlf)
+	;(printout  t "fill-water-ul-corner-when-left" crlf)
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
 	(modify ?expcell4 (content water))
@@ -425,7 +234,7 @@
 	?expcell3 <- (expected-cell (x 8) (y 1))
 	?expcell4 <- (expected-cell (x 8) (y 2))
 =>
-	(printout  t "fill-water-dl-corner-when-left" crlf)
+	;(printout  t "fill-water-dl-corner-when-left" crlf)
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
 	(modify ?expcell4 (content water))
@@ -442,7 +251,7 @@
 	?expcell3 <- (expected-cell (x 1) (y 8))
 	?expcell4 <- (expected-cell (x 1) (y 7))
 =>
-	(printout  t "fill-water-ur-corner-when-right" crlf)
+	;(printout  t "fill-water-ur-corner-when-right" crlf)
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
 	(modify ?expcell4 (content water))
@@ -457,7 +266,7 @@
 	?expcell3 <- (expected-cell (x 8) (y 8))
 	?expcell4 <- (expected-cell (x 8) (y 7))
 =>
-	(printout  t "fill-water-dr-corner-when-right" crlf)
+	;(printout  t "fill-water-dr-corner-when-right" crlf)
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
 	(modify ?expcell4 (content water))
@@ -474,7 +283,7 @@
 	?expcell3 <- (expected-cell (x 1) (y 1))
 	?expcell4 <- (expected-cell (x 2) (y 1))
 =>
-	(printout  t "fill-water-ul-corner-when-top" crlf)
+	;(printout  t "fill-water-ul-corner-when-top" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell3 (content water))
 	(modify ?expcell4 (content water))
@@ -489,7 +298,7 @@
 	?expcell3 <- (expected-cell (x 1) (y 8))
 	?expcell4 <- (expected-cell (x 2) (y 8))
 =>
-	(printout  t "fill-water-ur-corner-when-top" crlf)
+	;(printout  t "fill-water-ur-corner-when-top" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell3 (content water))
 	(modify ?expcell4 (content water))
@@ -506,7 +315,7 @@
 	?expcell3 <- (expected-cell (x 8) (y 1))
 	?expcell4 <- (expected-cell (x 7) (y 1))
 =>
-	(printout  t "fill-water-dl-corner-when-bot" crlf)
+	;(printout  t "fill-water-dl-corner-when-bot" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell3 (content water))
 	(modify ?expcell4 (content water))
@@ -521,7 +330,7 @@
 	?expcell3 <- (expected-cell (x 8) (y 8))
 	?expcell4 <- (expected-cell (x 7) (y 8))
 =>
-	(printout t "fill-water-dr-corner-when-bot" crlf)
+	;(printout t "fill-water-dr-corner-when-bot" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell3 (content water))
 	(modify ?expcell4 (content water))
@@ -544,7 +353,7 @@
 	?expcell7 <- (expected-cell (x ?x7&:(eq ?x7 (+ ?row 1))) (y ?col))
 	?expcell8 <- (expected-cell (x ?x8&:(eq ?x8 (+ ?row 1))) (y ?y8&:(eq ?y8 (+ ?col 1))))
 =>
-	(printout t "fill-water-internal-slot-when-sub" ?row " " ?col "." crlf)
+	;(printout t "fill-water-internal-slot-when-sub" ?row " " ?col "." crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
@@ -567,7 +376,7 @@
 	?expcell6 <- (expected-cell (x ?x3&:(eq ?x3 (+ ?row 1))) (y ?y3&:(eq ?y3 (- ?col 1))))
 	?expcell8 <- (expected-cell (x ?x4&:(eq ?x4 (+ ?row 1))) (y ?y4&:(eq ?y4 (+ ?col 1))))
 =>
-	(printout t "fill-water-internal-slot-when-middle" crlf)
+	;(printout t "fill-water-internal-slot-when-middle" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell3 (content water))
 	(modify ?expcell6 (content water))
@@ -591,7 +400,7 @@
 	?expcell8 <- (expected-cell (x ?x8&:(eq ?x8 (+ ?row 1))) (y ?y8&:(eq ?y8 (+ ?col 1))))
 	?expcell9 <- (expected-cell (x ?x9&:(eq ?x9 (+ ?row 1))) (y ?y9&:(eq ?y9 (+ ?col 2))))
 =>
-	(printout t "fill-water-internal-slot-when-left-more-internal" crlf)
+	;(printout t "fill-water-internal-slot-when-left-more-internal" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
@@ -616,7 +425,7 @@
 	?expcell7 <- (expected-cell (x ?x7&:(eq ?x7 (+ ?row 1))) (y 8))
 	?expcell8 <- (expected-cell (x ?x8&:(eq ?x8 (+ ?row 1))) (y 9))
 =>
-	(printout t "fill-water-internal-slot-when-left-edge-case" crlf)
+	;(printout t "fill-water-internal-slot-when-left-edge-case" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
@@ -643,7 +452,7 @@
 	?expcell8 <- (expected-cell (x ?x8&:(eq ?x8 (+ ?row 1))) (y ?y8&:(eq ?y8 (+ ?col 1))))
 	?expcell9 <- (expected-cell (x ?x9&:(eq ?x9 (+ ?row 1))) (y ?y9&:(eq ?y9 (- ?col 2))))
 =>
-	(printout t "fill-water-internal-slot-when-right-more-internal" crlf)
+	;(printout t "fill-water-internal-slot-when-right-more-internal" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
@@ -668,7 +477,7 @@
 	?expcell7 <- (expected-cell (x ?x7&:(eq ?x7 (+ ?row 1))) (y 1))
 	?expcell8 <- (expected-cell (x ?x8&:(eq ?x8 (+ ?row 1))) (y 2))
 =>
-	(printout t "fill-water-internal-slot-when-right-edge-case" crlf)
+	;(printout t "fill-water-internal-slot-when-right-edge-case" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
@@ -695,7 +504,7 @@
 	?expcell8 <- (expected-cell (x ?x8&:(eq ?x8 (+ ?row 2))) (y ?y8&:(eq ?y8 (- ?col 1))))
 	?expcell9 <- (expected-cell (x ?x9&:(eq ?x9 (+ ?row 2))) (y ?y9&:(eq ?y9 (+ ?col 1))))
 =>
-	(printout t "fill-water-internal-slot-when-top-more-internal" crlf)
+	;(printout t "fill-water-internal-slot-when-top-more-internal" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
@@ -720,7 +529,7 @@
 	?expcell6 <- (expected-cell (x 9) (y ?y6&:(eq ?y6 (- ?col 1))))
 	?expcell7 <- (expected-cell (x 9) (y ?y7&:(eq ?y7 (+ ?col 1))))
 =>
-	(printout t "fill-water-internal-slot-when-top-edge-case" crlf)
+	;(printout t "fill-water-internal-slot-when-top-edge-case" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
@@ -746,7 +555,7 @@
 	?expcell8 <- (expected-cell (x ?x8&:(eq ?x8 (- ?row 2))) (y ?y8&:(eq ?y8 (- ?col 1))))
 	?expcell9 <- (expected-cell (x ?x9&:(eq ?x9 (- ?row 2))) (y ?y9&:(eq ?y9 (+ ?col 1))))
 =>
-	(printout t "fill-water-internal-slot-when-bot-more-internal" crlf)
+	;(printout t "fill-water-internal-slot-when-bot-more-internal" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
@@ -771,7 +580,7 @@
 	?expcell6 <- (expected-cell (x 2) (y ?col))
 	?expcell7 <- (expected-cell (x 2) (y ?y7&:(eq ?y7 (+ ?col 1))))
 =>
-	(printout t "fill-water-internal-slot-when-bot-edge-case" crlf)
+	;(printout t "fill-water-internal-slot-when-bot-edge-case" crlf)
 	(modify ?expcell1 (content water))
 	(modify ?expcell2 (content water))
 	(modify ?expcell3 (content water))
@@ -797,7 +606,7 @@
 	?expcell-up-right <- (expected-cell (x 8) (y ?y7&:(eq ?y7 (+ ?col 1))))
 	?expcell-two-up-right <- (expected-cell (x 7) (y ?y9&:(eq ?y9 (+ ?col 1))))
 =>
-	(printout t "fill-water-south-edge" crlf)
+	;(printout t "fill-water-south-edge" crlf)
 	(if (eq ?cont left) then
 		(modify ?expcell-left (content water))
 		(modify ?expcell-up-left (content water))
@@ -845,7 +654,7 @@
 	?expcell-up-two-right <- (expected-cell (x 8) (y ?y8&:(eq ?y8 (+ ?col 2))))
 	?expcell-two-up-right <- (expected-cell (x 7) (y ?y9&:(eq ?y9 (+ ?col 1))))
 =>
-	(printout t "fill-water-south-edge-more-internal" crlf)
+	;(printout t "fill-water-south-edge-more-internal" crlf)
 	(if (eq ?cont left) then
 		(modify ?expcell-left (content water))
 		(modify ?expcell-up-left (content water))
@@ -893,7 +702,7 @@
 	?expcell-bottom-right <- (expected-cell (x 1) (y ?y7&:(eq ?y7 (+ ?col 1))))
 	?expcell-two-bottom-right <- (expected-cell (x 2) (y ?y9&:(eq ?y9 (+ ?col 1))))
 =>
-	(printout t "fill-water-north-edge" crlf)
+	;(printout t "fill-water-north-edge" crlf)
 	(if (eq ?cont left) then
 		(modify ?expcell-left (content water))
 		(modify ?expcell-bottom-left (content water))
@@ -940,7 +749,7 @@
 	?expcell-bottom-two-right <- (expected-cell (x 1) (y ?y8&:(eq ?y8 (+ ?col 2))))
 	?expcell-two-bottom-right <- (expected-cell (x 2) (y ?y9&:(eq ?y9 (+ ?col 1))))
 =>
-	(printout t "fill-water-north-edge-more-internal" crlf)
+	;(printout t "fill-water-north-edge-more-internal" crlf)
 	(if (eq ?cont left) then
 		(modify ?expcell-left (content water))
 		(modify ?expcell-bottom-left (content water))
@@ -988,7 +797,7 @@
 	?expcell-bottom-two-right <- (expected-cell (x ?x7&:(eq ?x7 (+ ?row 1))) (y 2))
 	?expcell-bottom <- (expected-cell (x ?x9&:(eq ?x9 (+ ?row 1))) (y 0))
 =>
-	(printout t "fill-water-west-edge" crlf)
+	;(printout t "fill-water-west-edge" crlf)
 	(if (eq ?cont left) then
 		(modify ?expcell-up (content water))
 		(modify ?expcell-up-right (content water))
@@ -1035,7 +844,7 @@
 	?expcell-two-bottom-right <- (expected-cell (x ?x8&:(eq ?x8 (+ ?row 2))) (y 1))
 	?expcell-bottom <- (expected-cell (x ?x9&:(eq ?x9 (+ ?row 1))) (y 0))
 =>
-	(printout t "fill-water-west-edge-more-internal" crlf)
+	;(printout t "fill-water-west-edge-more-internal" crlf)
 	(if (eq ?cont left) then
 		(modify ?expcell-up (content water))
 		(modify ?expcell-up-right (content water))
@@ -1084,7 +893,7 @@
 	?expcell-bottom-two-left <- (expected-cell (x ?x8&:(eq ?x8 (+ ?row 1))) (y 7))
 	?expcell-bottom <- (expected-cell (x ?x9&:(eq ?x9 (+ ?row 1))) (y 9))
 =>
-	(printout  t "fill-water-east-edge" crlf)
+	;(printout  t "fill-water-east-edge" crlf)
 	(if (eq ?cont right) then
 		(modify ?expcell-up (content water))
 		(modify ?expcell-up-left (content water))
@@ -1131,7 +940,7 @@
 	?expcell-bottom-two-left <- (expected-cell (x ?x8&:(eq ?x8 (+ ?row 2))) (y 7))
 	?expcell-bottom <- (expected-cell (x ?x9&:(eq ?x9 (+ ?row 1))) (y 9))
 =>
-	(printout  t "fill-water-east-edge-more-internal" crlf)
+	;(printout  t "fill-water-east-edge-more-internal" crlf)
 	(if (eq ?cont right) then
 		(modify ?expcell-up (content water))
 		(modify ?expcell-up-left (content water))
@@ -1175,7 +984,7 @@
 	?expcell <- (expected-cell (x ?x) (y ?diffcol))
 	?expcell-down <- (expected-cell (x ?x2&:(eq ?x2 (+ ?x 1))) (y ?y))
 =>
-	(printout t "fill-water-north-when-k-per-row-is-three-and-there-is-middle" crlf)
+	;(printout t "fill-water-north-when-k-per-row-is-three-and-there-is-middle" crlf)
 	(modify ?expcell-down (content water))
 	(if (eq ?diffcol (+ ?y 1)) then
 		(modify ?expcell (content right))
@@ -1192,7 +1001,7 @@
 	?expcell <- (expected-cell (x ?x) (y ?diffcol))
 	?expcell-top <- (expected-cell (x ?x2&:(eq ?x2 (- ?x 1))) (y ?y))
 =>
-	(printout t "fill-water-south-when-k-per-row-is-three-and-there-is-middle" crlf)
+	;(printout t "fill-water-south-when-k-per-row-is-three-and-there-is-middle" crlf)
 	(modify ?expcell-top (content water))
 	(if (eq ?diffcol (+ ?y 1)) then
 		(modify ?expcell (content right))
@@ -1210,7 +1019,7 @@
 	?expcell <- (expected-cell (x ?diffrow) (y ?y))
 	?expcell-right <- (expected-cell (x ?x) (y ?y2&:(eq ?y2 (+ ?y 1))))
 =>
-	(printout t "fill-water-west-when-k-per-col-is-three-and-there-is-middle" crlf)
+	;(printout t "fill-water-west-when-k-per-col-is-three-and-there-is-middle" crlf)
 	(modify ?expcell-right (content water))
 	(if (eq ?diffrow (+ ?x 1)) then
 		(modify ?expcell (content bot))
@@ -1227,7 +1036,7 @@
 	?expcell <- (expected-cell (x ?diffrow) (y ?y))
 	?expcell-left <- (expected-cell (x ?x) (y ?y2&:(eq ?y2 (- ?y 1))))
 =>
-	(printout t "fill-water-east-when-k-per-col-is-three-and-there-is-middle" crlf)
+	;(printout t "fill-water-east-when-k-per-col-is-three-and-there-is-middle" crlf)
 	(modify ?expcell-left (content water))
 	(if (eq ?diffrow (+ ?x 1)) then
 		(modify ?expcell (content bot))
@@ -1243,7 +1052,7 @@
 	(k-per-row (row ?x) (num 2))
 	?expcell <- (expected-cell (x ?x) (y ?diffcol))
 =>
-	(printout t "fill-water-row-when-k-per-row-is-two-and-there-is-left" crlf)
+	;(printout t "fill-water-row-when-k-per-row-is-two-and-there-is-left" crlf)
 	(if (eq ?diffcol (+ ?y 1)) then
 		(modify ?expcell (content right))
 	else (if (neq ?diffcol ?y) then
@@ -1255,7 +1064,7 @@
 	(k-per-row (row ?x) (num 2))
 	?expcell <- (expected-cell (x ?x) (y ?diffcol))
 =>
-	(printout t "fill-water-row-when-k-per-row-is-two-and-there-is-right" crlf)
+	;(printout t "fill-water-row-when-k-per-row-is-two-and-there-is-right" crlf)
 	(if (eq ?diffcol (- ?y 1)) then
 		(modify ?expcell (content left))
 	else (if (neq ?diffcol ?y) then
@@ -1268,7 +1077,7 @@
 	(expected-cell (x ?val&:(eq ?val (+ ?x 1))) (y ?y))
 	?expcell <- (expected-cell (x ?diffrow) (y ?y))
 =>
-	(printout t "fill-water-col-when-k-per-col-is-two-and-there-is-top" crlf)
+	;(printout t "fill-water-col-when-k-per-col-is-two-and-there-is-top" crlf)
 	(if (eq ?diffrow (+ ?x 1)) then
 		(modify ?expcell (content bot))
 	else (if (neq ?diffrow ?x) then
@@ -1281,7 +1090,7 @@
 	(expected-cell (x ?val&:(eq ?val (- ?x 1))) (y ?y))
 	?expcell <- (expected-cell (x ?diffrow) (y ?y))
 =>
-	(printout t "fill-water-col-when-k-per-col-is-two-and-there-is-bot" crlf)
+	;(printout t "fill-water-col-when-k-per-col-is-two-and-there-is-bot" crlf)
 	(if (eq ?diffrow (- ?x 1)) then
 		(modify ?expcell (content top))
 	else (if (neq ?diffrow ?x) then
@@ -1293,7 +1102,7 @@
 	(k-per-row (row ?row) (num 0))
 	?expcell <- (expected-cell (x ?row) (y ?col) (content blank))
 =>
-	(printout t "fill-water-row-when-k-cell-row-is-empty" crlf)
+	;(printout t "fill-water-row-when-k-cell-row-is-empty" crlf)
 	(modify ?expcell (content water))
 )
 
@@ -1301,7 +1110,7 @@
 	(k-per-col (col ?col) (num 0))
 	?expcell <- (expected-cell (x ?row) (y ?col) (content blank))
 =>
-	(printout t "fill-water-column-when-k-cell-col-is-empty" crlf)
+	;(printout t "fill-water-column-when-k-cell-col-is-empty" crlf)
 	(modify ?expcell (content water))
 )
 
@@ -1314,8 +1123,8 @@
 	?bot-cell <- (expected-cell (x ?val2&:(eq ?val2 (+ ?row 1))) (y ?col) (content ?cont2))
 	?left-cell <- (expected-cell (x ?row) (y ?val3&:(eq ?val3 (- ?col 1))) (content ?cont3))
 	?right-cell <- (expected-cell (x ?row) (y ?val4&:(eq ?val4 (+ ?col 1))) (content ?cont4))
-	=>
-	(printout t "fill-water-around-middle-if-cross-water" crlf)
+=>
+	;(printout t "fill-water-around-middle-if-cross-water" crlf)
 	(if (eq ?cont1 water) then
 		(modify ?bot-cell (content water))
 	else (if (eq ?cont2 water) then
@@ -1344,27 +1153,27 @@
 (deftemplate to-guess (slot num))
 
 (deffacts guesses
-(agent-guess (x -1) (y -1) (num 0))
-(agent-guess (x -1) (y -1) (num 1))
-(agent-guess (x -1) (y -1) (num 2))
-(agent-guess (x -1) (y -1) (num 3))
-(agent-guess (x -1) (y -1) (num 4))
-(agent-guess (x -1) (y -1) (num 5))
-(agent-guess (x -1) (y -1) (num 6))
-(agent-guess (x -1) (y -1) (num 7))
-(agent-guess (x -1) (y -1) (num 8))
-(agent-guess (x -1) (y -1) (num 9))
-(agent-guess (x -1) (y -1) (num 10))
-(agent-guess (x -1) (y -1) (num 11))
-(agent-guess (x -1) (y -1) (num 12))
-(agent-guess (x -1) (y -1) (num 13))
-(agent-guess (x -1) (y -1) (num 14))
-(agent-guess (x -1) (y -1) (num 15))
-(agent-guess (x -1) (y -1) (num 16))
-(agent-guess (x -1) (y -1) (num 17))
-(agent-guess (x -1) (y -1) (num 18))
-(agent-guess (x -1) (y -1) (num 19))
-(to-guess (num 0))
+	(agent-guess (x -1) (y -1) (num 0))
+	(agent-guess (x -1) (y -1) (num 1))
+	(agent-guess (x -1) (y -1) (num 2))
+	(agent-guess (x -1) (y -1) (num 3))
+	(agent-guess (x -1) (y -1) (num 4))
+	(agent-guess (x -1) (y -1) (num 5))
+	(agent-guess (x -1) (y -1) (num 6))
+	(agent-guess (x -1) (y -1) (num 7))
+	(agent-guess (x -1) (y -1) (num 8))
+	(agent-guess (x -1) (y -1) (num 9))
+	(agent-guess (x -1) (y -1) (num 10))
+	(agent-guess (x -1) (y -1) (num 11))
+	(agent-guess (x -1) (y -1) (num 12))
+	(agent-guess (x -1) (y -1) (num 13))
+	(agent-guess (x -1) (y -1) (num 14))
+	(agent-guess (x -1) (y -1) (num 15))
+	(agent-guess (x -1) (y -1) (num 16))
+	(agent-guess (x -1) (y -1) (num 17))
+	(agent-guess (x -1) (y -1) (num 18))
+	(agent-guess (x -1) (y -1) (num 19))
+	(to-guess (num 0))
 )
 
 (defrule guess-known-ship
@@ -1454,6 +1263,138 @@
 	?curr <- (agent-guess (num ?guess-num))
 =>
 	(modify ?curr (x (+ ?row 1)) (y ?col))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule guess-left-side-of-middle-if-above-cell-is-water-internal-square
+	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
+	?other-cell <- (expected-cell (x ?x&:(eq ?x (- ?row 1))) (y ?col) (content water))
+	(not (agent-guess (x ?row) (y ?y&:(eq ?y (- ?col 1)))))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=>
+	(modify ?curr (x ?row) (y (- ?col 1)))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule guess-right-side-of-middle-if-above-cell-is-water-internal-square
+	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
+	?other-cell <- (expected-cell (x ?x&:(eq ?x (- ?row 1))) (y ?col) (content water))
+	(not (agent-guess (x ?row) (y ?y&:(eq ?y (+ ?col 1)))))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=>
+	(modify ?curr (x ?row) (y (+ ?col 1)))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule guess-left-side-of-middle-if-below-cell-is-water-internal-square
+	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
+	?other-cell <- (expected-cell (x ?x&:(eq ?x (+ ?row 1))) (y ?col) (content water))
+	(not (agent-guess (x ?row) (y ?y&:(eq ?y (- ?col 1)))))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=>
+	(modify ?curr (x ?row) (y (- ?col 1)))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule guess-right-side-of-middle-if-below-cell-is-water-internal-square
+	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
+	?other-cell <- (expected-cell (x ?x&:(eq ?x (+ ?row 1))) (y ?col) (content water))
+	(not (agent-guess (x ?row) (y ?y&:(eq ?y (+ ?col 1)))))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=>
+	(modify ?curr (x ?row) (y (+ ?col 1)))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule guess-upper-side-of-middle-if-left-cell-is-water-internal-square
+	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
+	?other-cell <- (expected-cell (x ?row) (y ?y&:(eq ?y (- ?col 1))) (content water))
+	(not (agent-guess (x ?x&:(eq ?x (- ?row 1))) (y ?col)))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=>
+	(modify ?curr (x (- ?row 1)) (y ?col))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule guess-bottom-side-of-middle-if-left-cell-is-water-internal-square
+	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
+	?other-cell <- (expected-cell (x ?row) (y ?y&:(eq ?y (- ?col 1))) (content water))
+	(not (agent-guess (x ?x&:(eq ?x (+ ?row 1))) (y ?col)))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=>
+	(modify ?curr (x (+ ?row 1)) (y ?col))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule guess-upper-side-of-middle-if-right-cell-is-water-internal-square
+	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
+	?other-cell <- (expected-cell (x ?row) (y ?y&:(eq ?y (+ ?col 1))) (content water))
+	(not (agent-guess (x ?x&:(eq ?x (- ?row 1))) (y ?col)))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=>
+	(modify ?curr (x (- ?row 1)) (y ?col))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule guess-bottom-side-of-middle-if-right-cell-is-water-internal-square
+	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
+	?other-cell <- (expected-cell (x ?row) (y ?y&:(eq ?y (+ ?col 1))) (content water))
+	(not (agent-guess (x ?x&:(eq ?x (+ ?row 1))) (y ?col)))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=>
+	(modify ?curr (x (+ ?row 1)) (y ?col))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule guess-left-side-of-middle-if-right-cell-is-ship-internal-square
+	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
+	?other-cell <- (expected-cell (x ?row) (y ?y&:(eq ?y (+ ?col 1))) (content ?cont &~water &~blank))
+	(not (agent-guess (x ?row) (y ?guess-y&:(eq ?guess-y (- ?col 1)))))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=>
+	(modify ?curr (x ?row) (y (- ?col 1)))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule guess-right-side-of-middle-if-left-cell-is-ship-internal-square
+	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
+	?other-cell <- (expected-cell (x ?row) (y ?y&:(eq ?y (- ?col 1))) (content ?cont &~water &~blank))
+	(not (agent-guess (x ?row) (y ?guess-y&:(eq ?guess-y (+ ?col 1)))))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=>
+	(modify ?curr (x ?row) (y (+ ?col 1)))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule guess-bottom-side-of-middle-if-upper-cell-is-ship-internal-square
+	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
+	?other-cell <- (expected-cell (x ?x&:(eq ?x (- ?row 1))) (y ?col) (content ?cont &~water &~blank))
+	(not (agent-guess (x ?guess-x&:(eq ?guess-x (+ ?row 1))) (y ?col)))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=>
+	(modify ?curr (x (+ ?row 1)) (y ?col))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule guess-upper-side-of-middle-if-bottom-cell-is-ship-internal-square
+	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
+	?other-cell <- (expected-cell (x ?x&:(eq ?x (+ ?row 1))) (y ?col) (content ?cont &~water &~blank))
+	(not (agent-guess (x ?guess-x&:(eq ?guess-x (- ?row 1))) (y ?col)))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=>
+	(modify ?curr (x (- ?row 1)) (y ?col))
 	(modify ?num (num (+ 1 ?guess-num)))
 )
 
