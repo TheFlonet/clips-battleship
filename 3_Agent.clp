@@ -1157,6 +1157,33 @@
 	)
 )
 
+(defrule fill-four-piece-internal-ship-when-middle-middle-pattern-horizontal
+	(expected-cell (x ?x &~0 &~9) (y ?y &~8 &~9) (content middle))
+	(expected-cell (x ?x &~0 &~9) (y ?y1&:(eq ?y1 (+ ?y 1))) (content middle))
+	(expected-cell (x ?x) (y ?y2&:(eq ?y2 (+ ?y 2))) (content ?cont1))
+	(expected-cell (x ?x) (y ?y3&:(eq ?y3 (- ?y 1))) (content ?cont2))
+=>
+	;(printout t "fill-four-piece-internal-ship-when-middle-middle-pattern-horizontal" crlf)
+	(if (or (neq ?cont1 right) (neq ?cont2 left))
+	 	then 
+			(assert(k-cell (x ?x) (y ?y2) (content right)))
+			(assert(k-cell (x ?x) (y ?y3) (content left)))
+	)
+)
+
+(defrule fill-four-piece-internal-ship-when-middle-middle-pattern-vertical
+	(expected-cell (x ?x &~0 &~1) (y ?y &~0 &~9) (content middle))
+	(expected-cell (x ?x1&:(eq ?x1 (- ?x 1))) (y ?y)  (content middle))
+	(expected-cell (x ?x2&:(eq ?x2 (- ?x 2))) (y ?y)  (content ?cont1))
+	(expected-cell (x ?x3&:(eq ?x3 (+ ?x 1))) (y ?y)  (content ?cont2))
+=>
+	;(printout t "fill-four-piece-internal-ship-when-middle-middle-pattern-vertical" crlf)
+	(if (or (neq ?cont1 top) (neq ?cont2 bot))
+	 	then 
+			(assert(k-cell (x ?x2) (y ?y) (content top)))
+			(assert(k-cell (x ?x3) (y ?y) (content bot)))
+	)
+)
 
 (defrule fill-four-piece-internal-ship-when-top-blank-middle-pattern
 	(expected-cell (x ?x &~0 &~1) (y ?y &~0 &~9) (content middle))
@@ -1181,8 +1208,8 @@
 	;(printout t "fill-four-piece-internal-ship-when-middle-blank-bottom-pattern" crlf)
 	(if (or (neq ?cont1 middle) (neq ?cont2 bot))
 	 	then 
-			(assert(k-cell (x ?x) (y ?y2) (content middle)))
-			(assert(k-cell (x ?x) (y ?y3) (content top)))
+			(assert(k-cell (x ?x2) (y ?y) (content middle)))
+			(assert(k-cell (x ?x3) (y ?y) (content top)))
 	)
 )
 
@@ -1225,7 +1252,7 @@
 	))))
 )
 
-(defrule print-what-i-know (declare (salience -10000))
+(defrule print-what-i-know (declare (salience -1000))
 	(expected-cell (x ?x) (y ?y) (content ?t) )
 =>
 	(printout t "I know that cell [" ?x ", " ?y "] contains " ?t "." crlf)
@@ -1268,6 +1295,7 @@
 (defrule guess-known-ship
 	?boat-end <- (expected-cell (x ?row) (y ?col) (content ?cont &~water &~blank))
 	(not (agent-guess (x ?row) (y ?col)))
+	(not (exec (action fire) (x ?row) (y ?col)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 => 
@@ -1278,6 +1306,7 @@
 (defrule guess-side-of-known-left-ends
 	?boat-end <- (expected-cell (x ?row) (y ?col) (content left))
 	(not (agent-guess (x ?row) (y ?y&:(eq ?y (+ ?col 1)))))
+	(not (exec (action fire) (x ?row) (y ?y&:(eq ?y (+ ?col 1)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1288,6 +1317,7 @@
 (defrule guess-side-of-known-right-ends
 	?boat-end <- (expected-cell (x ?row) (y ?col) (content right))
 	(not (agent-guess (x ?row) (y ?y&:(eq ?y (- ?col 1)))))
+	(not (exec (action fire) (x ?row) (y ?y&:(eq ?y (- ?col 1)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1298,6 +1328,7 @@
 (defrule guess-side-of-known-top-ends
 	?boat-end <- (expected-cell (x ?row) (y ?col) (content top))
 	(not (agent-guess (x ?x&:(eq ?x (+ ?row 1))) (y ?col)))
+	(not (exec (action fire) (x ?x&:(eq ?x (+ ?row 1))) (y ?col)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1308,6 +1339,7 @@
 (defrule guess-side-of-known-bot-ends
 	?boat-end <- (expected-cell (x ?row) (y ?col) (content bot))
 	(not (agent-guess (x ?x&:(eq ?x (- ?row 1))) (y ?col)))
+	(not (exec (action fire) (x ?x&:(eq ?x (- ?row 1))) (y ?col)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1318,6 +1350,7 @@
 (defrule guess-left-side-of-middle-pieces-on-north-south-edge
 	?boat <- (expected-cell (x ?row &0|9) (y ?col) (content middle))
 	(not (agent-guess (x ?row) (y ?y&:(eq ?y (- ?col 1)))))
+	(not (exec (action fire) (x ?row) (y ?y&:(eq ?y (- ?col 1)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1328,6 +1361,7 @@
 (defrule guess-right-side-of-middle-pieces-on-north-south-edge
 	?boat <- (expected-cell (x ?row &0|9) (y ?col) (content middle))
 	(not (agent-guess (x ?row) (y ?y&:(eq ?y (+ ?col 1)))))
+	(not (exec (action fire) (x ?row) (y ?y&:(eq ?y (+ ?col 1)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1338,6 +1372,7 @@
 (defrule guess-top-side-of-middle-pieces-on-east-west-edge
 	?boat <- (expected-cell (x ?row) (y ?col &0|9) (content middle))
 	(not (agent-guess (x ?x&:(eq ?x (- ?row 1))) (y ?col))) 
+	(not (exec (action fire) (x ?x&:(eq ?x (- ?row 1))) (y ?col)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1348,6 +1383,7 @@
 (defrule guess-bottom-side-of-middle-pieces-on-east-west-edge
 	?boat <- (expected-cell (x ?row) (y ?col &0|9) (content middle))
 	(not (agent-guess (x ?x&:(eq ?x (+ ?row 1))) (y ?col)))
+	(not (exec (action fire) (x ?x&:(eq ?x (+ ?row 1))) (y ?col)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1359,6 +1395,7 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?x&:(eq ?x (- ?row 1))) (y ?col) (content water))
 	(not (agent-guess (x ?row) (y ?y&:(eq ?y (- ?col 1)))))
+	(not (exec (action fire) (x ?row) (y ?y&:(eq ?y (- ?col 1)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1370,6 +1407,7 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?x&:(eq ?x (- ?row 1))) (y ?col) (content water))
 	(not (agent-guess (x ?row) (y ?y&:(eq ?y (+ ?col 1)))))
+	(not (exec (action fire) (x ?row) (y ?y&:(eq ?y (+ ?col 1)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1381,6 +1419,7 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?x&:(eq ?x (+ ?row 1))) (y ?col) (content water))
 	(not (agent-guess (x ?row) (y ?y&:(eq ?y (- ?col 1)))))
+	(not (exec (action fire) (x ?row) (y ?y&:(eq ?y (- ?col 1)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1392,6 +1431,7 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?x&:(eq ?x (+ ?row 1))) (y ?col) (content water))
 	(not (agent-guess (x ?row) (y ?y&:(eq ?y (+ ?col 1)))))
+	(not (exec (action fire) (x ?row) (y ?y&:(eq ?y (+ ?col 1)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1403,6 +1443,7 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?row) (y ?y&:(eq ?y (- ?col 1))) (content water))
 	(not (agent-guess (x ?x&:(eq ?x (- ?row 1))) (y ?col)))
+	(not (exec (action fire) (x ?x&:(eq ?x (- ?row 1))) (y ?col)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1414,6 +1455,7 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?row) (y ?y&:(eq ?y (- ?col 1))) (content water))
 	(not (agent-guess (x ?x&:(eq ?x (+ ?row 1))) (y ?col)))
+	(not (exec (action fire) (x ?x&:(eq ?x (+ ?row 1))) (y ?col)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1425,6 +1467,7 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?row) (y ?y&:(eq ?y (+ ?col 1))) (content water))
 	(not (agent-guess (x ?x&:(eq ?x (- ?row 1))) (y ?col)))
+	(not (exec (action fire) (x ?x&:(eq ?x (- ?row 1))) (y ?col)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1436,6 +1479,7 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?row) (y ?y&:(eq ?y (+ ?col 1))) (content water))
 	(not (agent-guess (x ?x&:(eq ?x (+ ?row 1))) (y ?col)))
+	(not (exec (action fire) (x ?x&:(eq ?x (+ ?row 1))) (y ?col)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1447,6 +1491,7 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?row) (y ?y&:(eq ?y (+ ?col 1))) (content ?cont &~water &~blank))
 	(not (agent-guess (x ?row) (y ?guess-y&:(eq ?guess-y (- ?col 1)))))
+	(not (exec (action fire) (x ?row) (y ?guess-y&:(eq ?guess-y (- ?col 1)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1458,6 +1503,7 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?row) (y ?y&:(eq ?y (- ?col 1))) (content ?cont &~water &~blank))
 	(not (agent-guess (x ?row) (y ?guess-y&:(eq ?guess-y (+ ?col 1)))))
+	(not (exec (action fire) (x ?row) (y ?guess-y&:(eq ?guess-y (+ ?col 1)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1469,6 +1515,7 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?x&:(eq ?x (- ?row 1))) (y ?col) (content ?cont &~water &~blank))
 	(not (agent-guess (x ?guess-x&:(eq ?guess-x (+ ?row 1))) (y ?col)))
+	(not (exec (action fire) (x ?guess-x&:(eq ?guess-x (+ ?row 1))) (y ?col)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1480,6 +1527,7 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?x&:(eq ?x (+ ?row 1))) (y ?col) (content ?cont &~water &~blank))
 	(not (agent-guess (x ?guess-x&:(eq ?guess-x (- ?row 1))) (y ?col)))
+	(not (exec (action fire) (x ?guess-x&:(eq ?guess-x (- ?row 1))) (y ?col)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1487,17 +1535,17 @@
 	(modify ?num (num (+ 1 ?guess-num)))
 )
 
-(defrule call-guess ; (declare (salience -200))
+(defrule call-guess
 	(agent-guess (x ?x &~-1) (y ?y &~-1))
   	(status (step ?s)(currently running))
-	(not (exec  (action guess) (x ?x) (y ?y)))
+	(not (exec (action guess) (x ?x) (y ?y)))
   	(not (moves (guesses 0)))
 =>
 	(assert (exec (step ?s) (action guess) (x ?x) (y ?y)))
   	(pop-focus)
 )
 
-(defrule call-solve ; (declare (salience -1000))
+(defrule call-solve (declare (salience -10000))
 	(to-guess (num 20))
 	(status (step ?s) (currently running))
 =>
@@ -1505,14 +1553,332 @@
 	(pop-focus)
 )
 
-(defrule print-guesses (declare (salience -10000))
+(defrule print-guesses (declare (salience -1000))
 	(agent-guess (x ?x) (y ?y) (num ?n))
 =>
 	(printout t "agent-guess(" ?x ", " ?y ") - " ?n crlf)
 )
 
-(defrule print-guess-num (declare (salience -10000))
+(defrule print-guess-num (declare (salience -1000))
 	(to-guess (num ?guess-num))
 =>
 	(printout t "curr to guess " ?guess-num crlf)
+)
+
+; FIRE
+
+(deftemplate fire-round
+	(slot num)
+	(slot id)
+)
+
+(deftemplate to-fire (slot num))
+
+(deftemplate start-fire (slot yes))
+
+(deffacts fires
+	(fire-round (num 2) (id 0))
+	(fire-round (num 3) (id 1))
+	(fire-round (num 0) (id 2))
+	(fire-round (num 0) (id 3))
+	(fire-round (num 0) (id 4))
+	(to-fire (num 0))
+	(start-fire (yes false))
+)
+
+(defrule start-fire-round (declare (salience -1))
+	?sf <- (start-fire (yes false))
+=>
+	;(printout t "start fire round" crlf)
+	(modify ?sf (yes true))
+)
+
+(defrule next-round
+	?sf <- (start-fire (yes true))
+	?fire-num <- (to-fire (num ?n))
+	?fr <- (fire-round (num 0) (id ?n))
+=>
+	;(printout t "end fire round" crlf)
+	(modify ?fire-num (num (+ ?n 1)))
+	(modify ?sf (yes false))
+)
+
+(defrule fire-blank-on-left-of-middle-internal-square (declare (salience 5))
+	(start-fire (yes true))
+	?fire-num <- (to-fire (num ?n))
+	?fr <- (fire-round (num ?fn &~0) (id ?n))
+	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
+	?above <- (expected-cell (x ?x1&:(eq ?x1 (- ?row 1))) (y ?col) (content blank))
+	?below <- (expected-cell (x ?x2&:(eq ?x2 (+ ?row 1))) (y ?col) (content blank))
+	?left <- (expected-cell (x ?row) (y ?y1&:(eq ?y1 (- ?col 1))) (content blank))
+	?right <- (expected-cell (x ?row) (y ?y2&:(eq ?y2 (+ ?col 1))) (content blank))
+	(status (step ?s) (currently running))
+	(not (exec (action fire) (x ?row) (y ?y&:(eq ?y (- ?col 1)))))
+=>
+	(printout t "fire at (" ?row ", " (- ?col 1) ")" crlf)
+	(modify ?fr (num (- ?fn 1)))
+	(assert (exec (step ?s) (action fire) (x ?row) (y (- ?col 1))))
+  	(pop-focus)
+)
+
+(defrule fire-two-slot-away-from-left-piece-more-internal-square (declare (salience 4))
+	(start-fire (yes true))
+	?fire-num <- (to-fire (num ?n))
+	?fr <- (fire-round (num ?fn &~0) (id ?n))
+	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9 &~8) (content left))
+	?other <- (expected-cell (x ?row) (y ?y&:(eq ?y (+ ?col 2))) (content blank))
+	(status (step ?s) (currently running))
+	(not (exec (action fire) (x ?row) (y ?y&:(eq ?y (+ ?col 2)))))
+=>
+	(printout t "fire at (" ?row ", " (+ ?col 2) ")" crlf)
+	(modify ?fr (num (- ?fn 1)))
+	(assert (exec (step ?s) (action fire) (x ?row) (y (+ 2 ?col))))
+  	(pop-focus)
+)
+
+(defrule fire-two-slot-away-from-right-piece-more-internal-square (declare (salience 4))
+	(start-fire (yes true))
+	?fire-num <- (to-fire (num ?n))
+	?fr <- (fire-round (num ?fn &~0) (id ?n))
+	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~1 &~9) (content left))
+	?other <- (expected-cell (x ?row) (y ?y&:(eq ?y (- ?col 2))) (content blank))
+	(status (step ?s) (currently running))
+	(not (exec (action fire) (x ?row) (y ?y&:(eq ?y (- ?col 2)))))
+=>
+	(printout t "fire at (" ?row ", " (- ?col 2) ")" crlf)
+	(modify ?fr (num (- ?fn 1)))
+	(assert (exec (step ?s) (action fire) (x ?row) (y (- ?col 2))))
+	(pop-focus)
+)
+
+(defrule fire-two-slot-away-from-top-piece-more-internal-square (declare (salience 4))
+	(start-fire (yes true))
+	?fire-num <- (to-fire (num ?n))
+	?fr <- (fire-round (num ?fn &~0) (id ?n))
+	?boat <- (expected-cell (x ?row &~0 &~9 &~8) (y ?col &~0 &~9) (content top))
+	?other <- (expected-cell (x ?x&:(eq ?x (+ 2 ?row))) (y ?col) (content blank))
+	(status (step ?s) (currently running))
+	(not (exec (action fire) (x ?x&:(eq ?x (+ 2 ?row))) (y ?col)))
+=>
+	(printout t "fire at (" (+ 2 ?row) ", " ?col ")" crlf)
+	(modify ?fr (num (- ?fn 1)))
+	(assert (exec (step ?s) (action fire) (x (+ 2 ?row)) (y ?col)))
+	(pop-focus)
+)
+
+(defrule fire-two-slot-away-from-bottom-piece-more-internal-square (declare (salience 4))
+	(start-fire (yes true))
+	?fire-num <- (to-fire (num ?n))
+	?fr <- (fire-round (num ?fn &~0) (id ?n))
+	?boat <- (expected-cell (x ?row &~0 &~9 &~1) (y ?col &~0 &~9) (content top))
+	?other <- (expected-cell (x ?x&:(eq ?x (- ?row 2))) (y ?col) (content blank))
+	(status (step ?s) (currently running))
+	(not (exec (action fire) (x ?x&:(eq ?x (- ?row 2))) (y ?col)))
+=>
+	(printout t "fire at (" (- ?row 2) ", " ?col ")" crlf)
+	(modify ?fr (num (- ?fn 1)))
+	(assert (exec (step ?s) (action fire) (x (- ?row 2)) (y ?col)))
+	(pop-focus)
+)
+
+(defrule fire-left-of-middle-right-pattern
+	(start-fire (yes true))
+	?fire-num <- (to-fire (num ?n))
+	?fr <- (fire-round (num ?fn &~0) (id ?n))
+	?right-piece <- (expected-cell (x ?x) (y ?y &~0 &~1) (content right))
+	?middle-piece <- (expected-cell (x ?x) (y ?y1&:(eq ?y1 (- ?y 1))) (content middle))
+	(status (step ?s) (currently running))
+	(not (exec (action fire) (x ?x) (y ?y2&:(eq ?y2 (- ?y 2)))))
+=>
+	(printout t "fire at (" ?x ", " (- ?y 2) ")" crlf)
+	(modify ?fr (num (- ?fn 1)))
+	(assert (exec (step ?s) (action fire) (x ?x) (y (- ?y 2))))
+	(pop-focus)
+)
+
+(defrule fire-right-of-left-middle-pattern
+	(start-fire (yes true))
+	?fire-num <- (to-fire (num ?n))
+	?fr <- (fire-round (num ?fn &~0) (id ?n))
+	?right-piece <- (expected-cell (x ?x) (y ?y &~8 &~9) (content left))
+	?middle-piece <- (expected-cell (x ?x) (y ?y1&:(eq ?y1 (+ ?y 1))) (content middle))
+	(status (step ?s) (currently running))
+	(not (exec (action fire) (x ?x) (y ?y2&:(eq ?y2 (+ 2 ?y)))))
+=>
+	(printout t "fire at (" ?x ", " (+ 2 ?y) ")" crlf)
+	(modify ?fr (num (- ?fn 1)))
+	(assert (exec (step ?s) (action fire) (x ?x) (y (+ 2 ?y))))
+	(pop-focus)
+)
+
+(defrule fire-above-of-bottom-middle-pattern
+	(start-fire (yes true))
+	?fire-num <- (to-fire (num ?n))
+	?fr <- (fire-round (num ?fn &~0) (id ?n))
+	?bottom-piece <- (expected-cell (x ?x &~0 &~1) (y ?y) (content bot))
+	?middle-piece <- (expected-cell (x ?x1&:(eq ?x1 (- ?x 1))) (y ?y) (content middle))
+	(status (step ?s) (currently running))
+	(not (exec (action fire) (x ?x2&:(eq ?x2 (- ?x 2))) (y ?y)))
+=>
+	(printout t "fire at (" (- ?x 2) ", " ?y ")" crlf)
+	(modify ?fr (num (- ?fn 1)))
+	(assert (exec (step ?s) (action fire) (x (- ?x 2)) (y ?y)))
+	(pop-focus)
+)
+
+(defrule fire-below-of-middle-top-pattern
+	(start-fire (yes true))
+	?fire-num <- (to-fire (num ?n))
+	?fr <- (fire-round (num ?fn &~0) (id ?n))
+	?bottom-piece <- (expected-cell (x ?x &~8 &~9) (y ?y) (content top))
+	?middle-piece <- (expected-cell (x ?x1&:(eq ?x1 (+ 1 ?x))) (y ?y) (content middle))
+	(status (step ?s) (currently running))
+	(not (exec (action fire) (x ?x2&:(eq ?x2 (+ 2 ?x))) (y ?y)))
+=>
+	(printout t "fire at (" (+ 2 ?x) ", " ?y ")" crlf)
+	(modify ?fr (num (- ?fn 1)))
+	(assert (exec (step ?s) (action fire) (x (+ 2 ?x)) (y ?y)))
+	(pop-focus)
+)
+
+; backup rules to place fire if I have no better alternatives
+
+(defrule backup-fire
+	(start-fire (yes true))
+	?fire-num <- (to-fire (num ?n))
+	?fr <- (fire-round (num ?fn &~0) (id ?n))
+	?cell <- (expected-cell (x ?x) (y ?y) (content blank))
+	(status (step ?s) (currently running))
+	(not (exec (action fire) (x ?x) (y ?y)))
+=>
+	(printout t "fire at (" ?x ", " ?y ")" crlf)
+	(modify ?fr (num (- ?fn 1)))
+	(assert (exec (step ?s) (action fire) (x ?x) (y ?y)))
+	(pop-focus)
+)
+
+; backup rules to place guess if I have no better alternatives
+
+(defrule place-guess-in-most-likely-cells-two-away-from-left (declare (salience -1))
+	(moves (fires 0))
+	?cell <- (expected-cell (x ?x) (y ?y &~8 &~9) (content left))
+	(not (agent-guess (x ?x) (y ?y1&:(eq ?y1 (+ 2 ?y)))))
+	(not (exec (action fire) (x ?x) (y ?y1&:(eq ?y1 (+ 2 ?y)))))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=>
+	(modify ?curr (x ?x) (y (+ 2 ?y)))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule place-guess-in-most-likely-cells-two-away-from-right (declare (salience -1))
+	(moves (fires 0))
+	?cell <- (expected-cell (x ?x) (y ?y &~0 &~1) (content right))
+	(not (agent-guess (x ?x) (y ?y1&:(eq ?y1 (- ?y 2)))))
+	(not (exec (action fire) (x ?x) (y ?y1&:(eq ?y1 (- ?y 2)))))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=>
+	(modify ?curr (x ?x) (y (- ?y 2)))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule place-guess-in-most-likely-cells-two-away-from-top (declare (salience -1))
+	(moves (fires 0))
+	?cell <- (expected-cell (x ?x &~8 &~9) (y ?y) (content top))
+	(not (agent-guess (x ?x1&:(eq ?x1 (+ 2 ?x))) (y ?y)))
+	(not (exec (action fire) (x ?x1&:(eq ?x1 (+ 2 ?x))) (y ?y)))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=>
+	(modify ?curr (x (+ 2 ?x)) (y ?y))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule place-guess-in-most-likely-cells-two-away-from-bot (declare (salience -1))
+	(moves (fires 0))
+	?cell <- (expected-cell (x ?x &~0 &~1) (y ?y) (content bot))
+	(not (agent-guess (x ?x1&:(eq ?x1 (- ?x 2))) (y ?y)))
+	(not (exec (action fire) (x ?x1&:(eq ?x1 (- ?x 2))) (y ?y)))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=>
+	(modify ?curr (x (- ?x 2)) (y ?y))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule place-guess-in-most-likely-cells-top-around-middle (declare (salience -2))
+	(moves (fires 0))
+	?cell <- (expected-cell (x ?x &~0 &~9) (y ?y &~0 &~9) (content middle))
+	?top-cell <- (expected-cell (x ?x1&:(eq ?x1 (- ?x 1))) (y ?y) (content blank)) ; top
+	?bottom-cell <- (expected-cell (x ?x2&:(eq ?x2 (+ ?x 1))) (y ?y) (content blank)) ; bottom
+	?left-cell <- (expected-cell (x ?x) (y ?y1&:(eq ?y1 (- ?y 1))) (content blank)) ; left
+	?right-cell <- (expected-cell (x ?x) (y ?y2&:(eq ?y2 (+ ?y 1))) (content blank)) ; right
+	(not (agent-guess (x ?x1&:(eq ?x1 (- ?x 1))) (y ?y)))
+	(not (exec (action fire) (x ?x1&:(eq ?x1 (- ?x 1))) (y ?y)))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=>
+	(modify ?curr (x (- ?x 1)) (y ?y))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule place-guess-in-most-likely-cells-bot-around-middle (declare (salience -2))
+	(moves (fires 0))
+	?cell <- (expected-cell (x ?x &~0 &~9) (y ?y &~0 &~9) (content middle))
+	?top-cell <- (expected-cell (x ?x1&:(eq ?x1 (- ?x 1))) (y ?y) (content blank)) ; top
+	?bottom-cell <- (expected-cell (x ?x2&:(eq ?x2 (+ 1 ?x))) (y ?y) (content blank)) ; bottom
+	?left-cell <- (expected-cell (x ?x) (y ?y1&:(eq ?y1 (- ?y 1))) (content blank)) ; left
+	?right-cell <- (expected-cell (x ?x) (y ?y2&:(eq ?y2 (+ 1 ?y))) (content blank)) ; right
+	(not (agent-guess (x ?x1&:(eq ?x1 (+ 1 ?x))) (y ?y)))
+	(not (exec (action fire) (x ?x1&:(eq ?x1 (+ 1 ?x))) (y ?y)))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=>
+	(modify ?curr (x (+ 1 ?x)) (y ?y))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule place-guess-in-most-likely-cells-left-around-middle (declare (salience -2))
+	(moves (fires 0))
+	?cell <- (expected-cell (x ?x &~0 &~9) (y ?y &~0 &~9) (content middle))
+	?top-cell <- (expected-cell (x ?x1&:(eq ?x1 (- ?x 1))) (y ?y) (content blank)) ; top
+	?bottom-cell <- (expected-cell (x ?x2&:(eq ?x2 (+ 1 ?x))) (y ?y) (content blank)) ; bottom
+	?left-cell <- (expected-cell (x ?x) (y ?y1&:(eq ?y1 (- ?y 1))) (content blank)) ; left
+	?right-cell <- (expected-cell (x ?x) (y ?y2&:(eq ?y2 (+ 1 ?y))) (content blank)) ; right
+	(not (agent-guess (x ?x) (y ?y1&:(eq ?y1 (- ?y 1)))))
+	(not (exec (action fire) (x ?x) (y ?y1&:(eq ?y1 (- ?y 1)))))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=>
+	(modify ?curr (x ?x) (y (- ?y 1)))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule place-guess-in-most-likely-cells-right-around-middle (declare (salience -2))
+	(moves (fires 0))
+	?cell <- (expected-cell (x ?x &~0 &~9) (y ?y &~0 &~9) (content middle))
+	?top-cell <- (expected-cell (x ?x1&:(eq ?x1 (- ?x 1))) (y ?y) (content blank)) ; top
+	?bottom-cell <- (expected-cell (x ?x2&:(eq ?x2 (+ 1 ?x))) (y ?y) (content blank)) ; bottom
+	?left-cell <- (expected-cell (x ?x) (y ?y1&:(eq ?y1 (- ?y 1))) (content blank)) ; left
+	?right-cell <- (expected-cell (x ?x) (y ?y2&:(eq ?y2 (+ 1 ?y))) (content blank)) ; right
+	(not (agent-guess (x ?x) (y ?y1&:(eq ?y1 (+ 1 ?y)))))
+	(not (exec (action fire) (x ?x) (y ?y1&:(eq ?y1 (+ 1 ?y)))))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=>
+	(modify ?curr (x ?x) (y (+ 1 ?y)))
+	(modify ?num (num (+ 1 ?guess-num)))
+)
+
+(defrule place-guess-in-most-likely-cells-blank(declare (salience -3))
+	(moves (fires 0))
+	?cell <- (expected-cell (x ?x) (y ?y) (content blank))
+	(not (agent-guess (x ?x) (y ?y)))
+	(not (exec (action fire) (x ?x) (y ?y)))
+	?num <- (to-guess (num ?guess-num))
+	?curr <- (agent-guess (num ?guess-num))
+=>
+	(modify ?curr (x ?x) (y ?y))
+	(modify ?num (num (+ 1 ?guess-num)))
 )
