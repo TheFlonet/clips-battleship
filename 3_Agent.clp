@@ -978,14 +978,12 @@
 )
 
 ; SPECIFIC CASES WHEN A SINGLE PIECE AND K-PER-ROW/COL GIVE OUT THE FULL DISPOSITION
-(defrule fill-water-north-when-k-per-row-is-three-and-there-is-middle
-	(expected-cell (x ?x & 0) (y ?y) (content middle))
+(defrule fill-water-south-north-when-k-per-row-is-three-and-there-is-middle
+	(expected-cell (x ?x & 0 | 9) (y ?y) (content middle))
 	(k-per-row (row ?x) (num 3))
 	?expcell <- (expected-cell (x ?x) (y ?diffcol))
-	?expcell-down <- (expected-cell (x ?x2&:(eq ?x2 (+ ?x 1))) (y ?y))
 =>
-	;(printout t "fill-water-north-when-k-per-row-is-three-and-there-is-middle" crlf)
-	(modify ?expcell-down (content water))
+	;(printout t "fill-water-south-north-when-k-per-row-is-three-and-there-is-middle" crlf)
 	(if (eq ?diffcol (+ ?y 1)) then
 		(modify ?expcell (content right))
 	else (if (eq ?diffcol (- ?y 1)) then
@@ -995,49 +993,12 @@
 	)))
 )
 
-(defrule fill-water-south-when-k-per-row-is-three-and-there-is-middle
-	(expected-cell (x ?x & 9) (y ?y) (content middle))
-	(k-per-row (row ?x) (num 3))
-	?expcell <- (expected-cell (x ?x) (y ?diffcol))
-	?expcell-top <- (expected-cell (x ?x2&:(eq ?x2 (- ?x 1))) (y ?y))
-=>
-	;(printout t "fill-water-south-when-k-per-row-is-three-and-there-is-middle" crlf)
-	(modify ?expcell-top (content water))
-	(if (eq ?diffcol (+ ?y 1)) then
-		(modify ?expcell (content right))
-	else (if (eq ?diffcol (- ?y 1)) then
-		(modify ?expcell (content left))
-	else (if (neq ?diffcol ?y) then
-		(modify ?expcell (content water))
-	)))
-)
-
-
-(defrule fill-water-west-when-k-per-col-is-three-and-there-is-middle
-	(expected-cell (x ?x) (y ?y & 0) (content middle))
+(defrule fill-water-east-west-when-k-per-col-is-three-and-there-is-middle
+	(expected-cell (x ?x) (y ?y & 0 | 9) (content middle))
 	(k-per-col (col ?y) (num 3))
 	?expcell <- (expected-cell (x ?diffrow) (y ?y))
-	?expcell-right <- (expected-cell (x ?x) (y ?y2&:(eq ?y2 (+ ?y 1))))
 =>
-	;(printout t "fill-water-west-when-k-per-col-is-three-and-there-is-middle" crlf)
-	(modify ?expcell-right (content water))
-	(if (eq ?diffrow (+ ?x 1)) then
-		(modify ?expcell (content bot))
-	else (if (eq ?diffrow (- ?x 1)) then
-		(modify ?expcell (content top))
-	else (if (neq ?diffrow ?x) then
-		(modify ?expcell (content water))
-	)))
-)
-
-(defrule fill-water-east-when-k-per-col-is-three-and-there-is-middle
-	(expected-cell (x ?x) (y ?y & 9) (content middle))
-	(k-per-col (col ?y) (num 3))
-	?expcell <- (expected-cell (x ?diffrow) (y ?y))
-	?expcell-left <- (expected-cell (x ?x) (y ?y2&:(eq ?y2 (- ?y 1))))
-=>
-	;(printout t "fill-water-east-when-k-per-col-is-three-and-there-is-middle" crlf)
-	(modify ?expcell-left (content water))
+	;(printout t "fill-water-east-west-when-k-per-col-is-three-and-there-is-middle" crlf)
 	(if (eq ?diffrow (+ ?x 1)) then
 		(modify ?expcell (content bot))
 	else (if (eq ?diffrow (- ?x 1)) then
@@ -1097,6 +1058,135 @@
 		(modify ?expcell (content water))))
 )
 
+; SPECIFIC CASES FOR WHEN A SHIP IS COMPLETELY DEDUCTED THROUGH THE GEOGRAPHY OF THE MAP
+(defrule fill-ship-when-k-row-is-three-and-k-col-is-one
+	(expected-cell (x ?x &~0 &~9) (y ?y) (content middle))
+	(k-per-row) (row ?x) (num 3)
+	(k-per-col) (row ?y) (num 1)
+	?left <-(expected-cell (x ?x) (y ?y1&:(eq ?y1 (- ?y 1))))
+	?right <-(expected-cell (x ?x) (y ?y2&:(eq ?y2 (+ ?y 1))))
+	?col-cell <-(expected-cell (x ~?x) (y ?y))
+	?row-cell <- (expected-cell (x ?x) (y ~?y & ~?y1 & ~?y2))
+=>
+	;(printout t "fill-ship-when-k-row-is-three-and-k-col-is-one" crlf)
+	(modify ?left (content left))
+	(modify ?right (content right))
+	(modify ?col-cell (content water))
+	(modify ?row-cell (content water))
+)
+
+(defrule fill-ship-when-k-col-is-three-and-k-row-is-one
+	(expected-cell (x ?x ) (y ?y &~0 &~9) (content middle))
+	(k-per-row) (row ?x) (num 1)
+	(k-per-col) (row ?y) (num 3)
+	?top <-(expected-cell (x ?x1&:(eq ?x1 (- ?x 1))) (y ?y))
+	?bot <-(expected-cell (x ?x2&:(eq ?x2 (+ ?x 1))) (y ?y))
+	?col-cell <-(expected-cell (x ~?x & ~?x1 & ~?x2) (y ?y) )
+	?row-cell <- (expected-cell (x ?x) (y ~?y))
+=>
+	;(printout t "fill-ship-when-k-col-is-three-and-k-row-is-one" crlf)
+	(modify ?top (content top))
+	(modify ?bot (content bot))
+	(modify ?col-cell (content water))
+	(modify ?row-cell (content water))
+)
+
+(defrule fill-ship-when-k-row-is-three-and-k-col-is-two
+	(expected-cell (x ?x &~0 &~9) (y ?y) (content middle))
+	(k-per-row) (row ?x) (num 3)
+	(k-per-col) (row ?y) (num 2)
+	?left <-(expected-cell (x ?x) (y ?y1&:(eq ?y1 (- ?y 1))))
+	?right <-(expected-cell (x ?x) (y ?y2&:(eq ?y2 (+ ?y 1))))
+	?top <-(expected-cell (x ?x1&:(eq ?x1 (- ?x 1))) (y ?y))
+	?bot <-(expected-cell (x ?x2&:(eq ?x2 (+ ?x 1))) (y ?y))
+	?row-cell <- (expected-cell (x ?x) (y ~?y & ~?y1 & ~?y2))
+=>
+	;(printout t "fill-ship-when-k-row-is-three-and-k-col-is-two" crlf)
+	(modify ?left (content left))
+	(modify ?right (content right))
+	(modify ?top (content water))
+	(modify ?bot (content water))
+	(modify ?row-cell (content water))
+)
+
+(defrule fill-ship-when-k-col-is-three-and-k-row-is-two
+	(expected-cell (x ?x) (y ?y &~0 &~9) (content middle))
+	(k-per-row) (row ?x) (num 2)
+	(k-per-col) (row ?y) (num 3)
+	?left <-(expected-cell (x ?x) (y ?y1&:(eq ?y1 (- ?y 1))))
+	?right <-(expected-cell (x ?x) (y ?y2&:(eq ?y2 (+ ?y 1))))
+	?top <-(expected-cell (x ?x1&:(eq ?x1 (- ?x 1))) (y ?y))
+	?bot <-(expected-cell (x ?x2&:(eq ?x2 (+ ?x 1))) (y ?y))
+	?col-cell <-(expected-cell (x ~?x & ~?x1 & ~?x2) (y ?y))
+=>
+	;(printout t "fill-ship-when-k-col-is-three-and-k-row-is-two" crlf)
+	(modify ?left (content water))
+	(modify ?right (content water))
+	(modify ?top (content top))
+	(modify ?bot (content bot))
+	(modify ?col-cell (content water))
+)
+
+; CASE WHEN A MIDDLE PIECE AND A BORDER PIECE ARE DISTANT TWO CELLS FROM ONE ANOTHER (SHIP MUST BE LONG FOUR)
+
+(defrule fill-four-piece-internal-ship-when-left-blank-middle-pattern
+	(expected-cell (x ?x &~0 &~9) (y ?y &~0 &~1) (content middle))
+	(expected-cell (x ?x) (y ?y1&:(eq ?y1 (- ?y 2))) (content left))
+	(expected-cell (x ?x) (y ?y2&:(eq ?y2 (- ?y 1))) (content ?cont1))
+	(expected-cell (x ?x) (y ?y3&:(eq ?y3 (+ ?y 1))) (content ?cont2))
+=>
+	;(printout t "fill-four-piece-internal-ship-when-left-blank-middle-pattern" crlf)
+	(if (or (neq ?cont1 middle) (neq ?cont2 right))
+	 	then 
+			(assert(k-cell (x ?x) (y ?y2) (content middle)))
+			(assert(k-cell (x ?x) (y ?y3) (content right)))
+	)
+)
+
+(defrule fill-four-piece-internal-ship-when-middle-blank-right-pattern
+	(expected-cell (x ?x &~0 &~9) (y ?y &~8 &~9) (content middle))
+	(expected-cell (x ?x) (y ?y1&:(eq ?y1 (+ ?y 2))) (content right))
+	(expected-cell (x ?x) (y ?y2&:(eq ?y2 (+ ?y 1))) (content ?cont1))
+	(expected-cell (x ?x) (y ?y3&:(eq ?y3 (- ?y 1))) (content ?cont2))
+=>
+	;(printout t "fill-four-piece-internal-ship-when-middle-blank-right-pattern" crlf)
+	(if (or (neq ?cont1 middle) (neq ?cont2 left))
+	 	then 
+			(assert(k-cell (x ?x) (y ?y2) (content middle)))
+			(assert(k-cell (x ?x) (y ?y3) (content left)))
+	)
+)
+
+
+(defrule fill-four-piece-internal-ship-when-top-blank-middle-pattern
+	(expected-cell (x ?x &~0 &~1) (y ?y &~0 &~9) (content middle))
+	(expected-cell (x ?x1&:(eq ?x1 (- ?x 2))) (y ?y)  (content top))
+	(expected-cell (x ?x2&:(eq ?x2 (- ?x 1))) (y ?y)  (content ?cont1))
+	(expected-cell (x ?x3&:(eq ?x3 (+ ?x 1))) (y ?y)  (content ?cont2))
+=>
+	;(printout t "fill-four-piece-internal-ship-when-top-blank-middle-pattern" crlf)
+	(if (or (neq ?cont1 middle) (neq ?cont2 bot))
+	 	then 
+			(assert(k-cell (x ?x2) (y ?y) (content middle)))
+			(assert(k-cell (x ?x3) (y ?y) (content bot)))
+	)
+)
+
+(defrule fill-four-piece-internal-ship-when-middle-blank-bottom-pattern
+	(expected-cell (x ?x &~8 &~9) (y ?y &~0 &~9) (content middle))
+	(expected-cell (x ?x1&:(eq ?x1 (+ ?x 2))) (y ?y)  (content bot))
+	(expected-cell (x ?x2&:(eq ?x2 (+ ?x 1))) (y ?y)  (content ?cont1))
+	(expected-cell (x ?x3&:(eq ?x3 (- ?x 1))) (y ?y)  (content ?cont2))
+=>
+	;(printout t "fill-four-piece-internal-ship-when-middle-blank-bottom-pattern" crlf)
+	(if (or (neq ?cont1 middle) (neq ?cont2 bot))
+	 	then 
+			(assert(k-cell (x ?x) (y ?y2) (content middle)))
+			(assert(k-cell (x ?x) (y ?y3) (content top)))
+	)
+)
+
+
 ; WATER FILLING ON EMPTY ROWS AND COLUMNS
 (defrule fill-water-row-when-k-cell-row-is-empty
 	(k-per-row (row ?row) (num 0))
@@ -1115,7 +1205,6 @@
 )
 
 ; UPDATABLE CELLS WHEN THERE IS MORE INFORMATION AROUND A MIDDLE PIECE IN THE INTERAL PART OF THE BOARD
-; QUA LA RIFRAZIONE CI SALVA ALTRIMENTI ANDREBBE IN LOOP 
 
 (defrule fill-water-around-middle-if-cross-water
 	(expected-cell (x ?row & ~0 & ~9) (y ?col & ~0 & ~9) (content middle))
@@ -1136,7 +1225,7 @@
 	))))
 )
 
-(defrule print-what-i-know (declare (salience -100))
+(defrule print-what-i-know (declare (salience -10000))
 	(expected-cell (x ?x) (y ?y) (content ?t) )
 =>
 	(printout t "I know that cell [" ?x ", " ?y "] contains " ?t "." crlf)
@@ -1398,7 +1487,7 @@
 	(modify ?num (num (+ 1 ?guess-num)))
 )
 
-(defrule call-guess (declare (salience -200))
+(defrule call-guess ; (declare (salience -200))
 	(agent-guess (x ?x &~-1) (y ?y &~-1))
   	(status (step ?s)(currently running))
 	(not (exec  (action guess) (x ?x) (y ?y)))
@@ -1408,7 +1497,7 @@
   	(pop-focus)
 )
 
-(defrule call-solve (declare (salience -300))
+(defrule call-solve ; (declare (salience -1000))
 	(to-guess (num 20))
 	(status (step ?s) (currently running))
 =>
@@ -1416,13 +1505,13 @@
 	(pop-focus)
 )
 
-(defrule print-guesses (declare (salience -100))
+(defrule print-guesses (declare (salience -10000))
 	(agent-guess (x ?x) (y ?y) (num ?n))
 =>
 	(printout t "agent-guess(" ?x ", " ?y ") - " ?n crlf)
 )
 
-(defrule print-guess-num (declare (salience -100))
+(defrule print-guess-num (declare (salience -10000))
 	(to-guess (num ?guess-num))
 =>
 	(printout t "curr to guess " ?guess-num crlf)
