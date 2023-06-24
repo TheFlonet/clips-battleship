@@ -1589,7 +1589,6 @@
 (defrule start-fire-round (declare (salience -1))
 	?sf <- (start-fire (yes false))
 =>
-	;(printout t "start fire round" crlf)
 	(modify ?sf (yes true))
 )
 
@@ -1598,7 +1597,6 @@
 	?fire-num <- (to-fire (num ?n))
 	?fr <- (fire-round (num 0) (id ?n))
 =>
-	;(printout t "end fire round" crlf)
 	(modify ?fire-num (num (+ ?n 1)))
 	(modify ?sf (yes false))
 )
@@ -1614,6 +1612,7 @@
 	?right <- (expected-cell (x ?row) (y ?y2&:(eq ?y2 (+ ?col 1))) (content blank))
 	(status (step ?s) (currently running))
 	(not (exec (action fire) (x ?row) (y ?y&:(eq ?y (- ?col 1)))))
+	(not (agent-guess (x ?row) (y ?y&:(eq ?y (- ?col 1)))))
 =>
 	(printout t "fire at (" ?row ", " (- ?col 1) ")" crlf)
 	(modify ?fr (num (- ?fn 1)))
@@ -1629,6 +1628,7 @@
 	?other <- (expected-cell (x ?row) (y ?y&:(eq ?y (+ ?col 2))) (content blank))
 	(status (step ?s) (currently running))
 	(not (exec (action fire) (x ?row) (y ?y&:(eq ?y (+ ?col 2)))))
+	(not (agent-guess (x ?row) (y ?y&:(eq ?y (+ ?col 2)))))
 =>
 	(printout t "fire at (" ?row ", " (+ ?col 2) ")" crlf)
 	(modify ?fr (num (- ?fn 1)))
@@ -1644,6 +1644,7 @@
 	?other <- (expected-cell (x ?row) (y ?y&:(eq ?y (- ?col 2))) (content blank))
 	(status (step ?s) (currently running))
 	(not (exec (action fire) (x ?row) (y ?y&:(eq ?y (- ?col 2)))))
+	(not (agent-guess (x ?row) (y ?y&:(eq ?y (- ?col 2)))))
 =>
 	(printout t "fire at (" ?row ", " (- ?col 2) ")" crlf)
 	(modify ?fr (num (- ?fn 1)))
@@ -1659,6 +1660,7 @@
 	?other <- (expected-cell (x ?x&:(eq ?x (+ 2 ?row))) (y ?col) (content blank))
 	(status (step ?s) (currently running))
 	(not (exec (action fire) (x ?x&:(eq ?x (+ 2 ?row))) (y ?col)))
+	(not (agent-guess (x ?x&:(eq ?x (+ 2 ?row))) (y ?col)))
 =>
 	(printout t "fire at (" (+ 2 ?row) ", " ?col ")" crlf)
 	(modify ?fr (num (- ?fn 1)))
@@ -1674,6 +1676,7 @@
 	?other <- (expected-cell (x ?x&:(eq ?x (- ?row 2))) (y ?col) (content blank))
 	(status (step ?s) (currently running))
 	(not (exec (action fire) (x ?x&:(eq ?x (- ?row 2))) (y ?col)))
+	(not (agent-guess (x ?x&:(eq ?x (- ?row 2))) (y ?col)))
 =>
 	(printout t "fire at (" (- ?row 2) ", " ?col ")" crlf)
 	(modify ?fr (num (- ?fn 1)))
@@ -1689,6 +1692,7 @@
 	?middle-piece <- (expected-cell (x ?x) (y ?y1&:(eq ?y1 (- ?y 1))) (content middle))
 	(status (step ?s) (currently running))
 	(not (exec (action fire) (x ?x) (y ?y2&:(eq ?y2 (- ?y 2)))))
+	(not (agent-guess (x ?x) (y ?y2&:(eq ?y2 (- ?y 2)))))
 =>
 	(printout t "fire at (" ?x ", " (- ?y 2) ")" crlf)
 	(modify ?fr (num (- ?fn 1)))
@@ -1704,6 +1708,7 @@
 	?middle-piece <- (expected-cell (x ?x) (y ?y1&:(eq ?y1 (+ ?y 1))) (content middle))
 	(status (step ?s) (currently running))
 	(not (exec (action fire) (x ?x) (y ?y2&:(eq ?y2 (+ 2 ?y)))))
+	(not (agent-guess (x ?x) (y ?y2&:(eq ?y2 (+ 2 ?y)))))
 =>
 	(printout t "fire at (" ?x ", " (+ 2 ?y) ")" crlf)
 	(modify ?fr (num (- ?fn 1)))
@@ -1719,6 +1724,7 @@
 	?middle-piece <- (expected-cell (x ?x1&:(eq ?x1 (- ?x 1))) (y ?y) (content middle))
 	(status (step ?s) (currently running))
 	(not (exec (action fire) (x ?x2&:(eq ?x2 (- ?x 2))) (y ?y)))
+	(not (agent-guess (x ?x2&:(eq ?x2 (- ?x 2))) (y ?y)))
 =>
 	(printout t "fire at (" (- ?x 2) ", " ?y ")" crlf)
 	(modify ?fr (num (- ?fn 1)))
@@ -1734,6 +1740,7 @@
 	?middle-piece <- (expected-cell (x ?x1&:(eq ?x1 (+ 1 ?x))) (y ?y) (content middle))
 	(status (step ?s) (currently running))
 	(not (exec (action fire) (x ?x2&:(eq ?x2 (+ 2 ?x))) (y ?y)))
+	(not (agent-guess (x ?x2&:(eq ?x2 (+ 2 ?x))) (y ?y)))
 =>
 	(printout t "fire at (" (+ 2 ?x) ", " ?y ")" crlf)
 	(modify ?fr (num (- ?fn 1)))
@@ -1750,6 +1757,7 @@
 	?cell <- (expected-cell (x ?x) (y ?y) (content blank))
 	(status (step ?s) (currently running))
 	(not (exec (action fire) (x ?x) (y ?y)))
+	(not (agent-guess (x ?x) (y ?y)))
 =>
 	(printout t "fire at (" ?x ", " ?y ")" crlf)
 	(modify ?fr (num (- ?fn 1)))
