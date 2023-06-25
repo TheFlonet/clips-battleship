@@ -1252,11 +1252,11 @@
 	))))
 )
 
-(defrule print-what-i-know (declare (salience -1000))
-	(expected-cell (x ?x) (y ?y) (content ?t) )
-=>
-	(printout t "I know that cell [" ?x ", " ?y "] contains " ?t "." crlf)
-)
+; (defrule print-what-i-know (declare (salience -1000))
+; 	(expected-cell (x ?x) (y ?y) (content ?t) )
+; =>
+; 	(printout t "I know that cell [" ?x ", " ?y "] contains " ?t "." crlf)
+; )
 
 ; GUESS PHASE
 
@@ -1559,12 +1559,6 @@
 	(printout t "agent-guess(" ?x ", " ?y ") - " ?n crlf)
 )
 
-(defrule print-guess-num (declare (salience -1000))
-	(to-guess (num ?guess-num))
-=>
-	(printout t "curr to guess " ?guess-num crlf)
-)
-
 ; FIRE
 
 (deftemplate fire-round
@@ -1681,6 +1675,222 @@
 	(printout t "fire at (" (- ?row 2) ", " ?col ")" crlf)
 	(modify ?fr (num (- ?fn 1)))
 	(assert (exec (step ?s) (action fire) (x (- ?row 2)) (y ?col)))
+	(pop-focus)
+)
+
+(defrule fire-two-above-middle-if-below-is-bot
+	(start-fire (yes true))
+	?fire-num <- (to-fire (num ?n))
+	?fr <- (fire-round (num ?fn &~0) (id ?n))
+	?boat <- (expected-cell (x ?x &~0 &~9 &~1) (y ?y &~0 &~9) (content middle))
+	?top-cell <- (expected-cell (x ?x1&:(eq ?x1 (- ?x 1))) (y ?y) (content ?cont-top &~top &~water)) ; top
+	?bottom-cell <- (expected-cell (x ?x2&:(eq ?x2 (+ ?x 1))) (y ?y) (content bot)) ; bottom
+	?target <- (expected-cell (x ?target-x&:(eq ?target-x (- ?x 2))) (y ?y))
+	(not (exec (action fire) (x ?target-x&:(eq ?target-x (- ?x 2))) (y ?y)))
+	(not (agent-guess (x ?target-x&:(eq ?target-x (- ?x 2))) (y ?y)))
+	(status (step ?s) (currently running))
+=>
+	(printout t "fire at (" (- ?x 2)  ", " ?y ")" crlf)
+	(modify ?fr (num (- ?fn 1)))
+	(assert (exec (step ?s) (action fire) (x (- ?x 2)) (y ?y)))
+	(pop-focus)
+)
+
+(defrule fire-two-above-middle-if-left-is-water
+	(start-fire (yes true))
+	?fire-num <- (to-fire (num ?n))
+	?fr <- (fire-round (num ?fn &~0) (id ?n))
+	?boat <- (expected-cell (x ?x &~0 &~9 &~1) (y ?y &~0 &~9) (content middle))
+	?top-cell <- (expected-cell (x ?x1&:(eq ?x1 (- ?x 1))) (y ?y) (content ?cont-top &~top &~water)) ; top
+	?left-cell <- (expected-cell (x ?x) (y ?y1&:(eq ?y1 (- ?y 1))) (content water)) ; left
+	?target <- (expected-cell (x ?target-x&:(eq ?target-x (- ?x 2))) (y ?y))
+	(not (exec (action fire) (x ?target-x&:(eq ?target-x (- ?x 2))) (y ?y)))
+	(not (agent-guess (x ?target-x&:(eq ?target-x (- ?x 2))) (y ?y)))
+	(status (step ?s) (currently running))
+=>
+	(printout t "fire at (" (- ?x 2)  ", " ?y ")" crlf)
+	(modify ?fr (num (- ?fn 1)))
+	(assert (exec (step ?s) (action fire) (x (- ?x 2)) (y ?y)))
+	(pop-focus)
+)
+
+(defrule fire-two-above-middle-if-right-is-water
+	(start-fire (yes true))
+	?fire-num <- (to-fire (num ?n))
+	?fr <- (fire-round (num ?fn &~0) (id ?n))
+	?boat <- (expected-cell (x ?x &~0 &~9 &~1) (y ?y &~0 &~9) (content middle))
+	?top-cell <- (expected-cell (x ?x1&:(eq ?x1 (- ?x 1))) (y ?y) (content ?cont-top &~top &~water)) ; top
+	?right-cell <- (expected-cell (x ?x) (y ?y2&:(eq ?y2 (+ ?y 1))) (content water)) ; right
+	?target <- (expected-cell (x ?target-x&:(eq ?target-x (- ?x 2))) (y ?y))
+	(not (exec (action fire) (x ?target-x&:(eq ?target-x (- ?x 2))) (y ?y)))
+	(not (agent-guess (x ?target-x&:(eq ?target-x (- ?x 2))) (y ?y)))
+	(status (step ?s) (currently running))
+=>
+	(printout t "fire at (" (- ?x 2)  ", " ?y ")" crlf)
+	(modify ?fr (num (- ?fn 1)))
+	(assert (exec (step ?s) (action fire) (x (- ?x 2)) (y ?y)))
+	(pop-focus)
+)
+
+(defrule fire-two-below-middle-if-above-is-top
+	(start-fire (yes true))
+	?fire-num <- (to-fire (num ?n))
+	?fr <- (fire-round (num ?fn &~0) (id ?n))
+	?boat <- (expected-cell (x ?x &~0 &~9 &~8) (y ?y &~0 &~9) (content middle))
+	?top-cell <- (expected-cell (x ?x1&:(eq ?x1 (- ?x 1))) (y ?y) (content top)) ; top
+	?bottom-cell <- (expected-cell (x ?x2&:(eq ?x2 (+ ?x 1))) (y ?y) (content ?cont-bot &~bot &~water)) ; bottom
+	?target <- (expected-cell (x ?target-x&:(eq ?target-x (+ ?x 2))) (y ?y))
+	(not (exec (action fire) (x ?target-x&:(eq ?target-x (+ ?x 2))) (y ?y)))
+	(not (agent-guess (x ?target-x&:(eq ?target-x (+ ?x 2))) (y ?y)))
+	(status (step ?s) (currently running))
+=>
+	(printout t "fire at (" (+ ?x 2) ", " ?y ")" crlf)
+	(modify ?fr (num (- ?fn 1)))
+	(assert (exec (step ?s) (action fire) (x (+ ?x 2)) (y ?y)))
+	(pop-focus)
+)
+
+(defrule fire-two-below-middle-if-left-is-water
+	(start-fire (yes true))
+	?fire-num <- (to-fire (num ?n))
+	?fr <- (fire-round (num ?fn &~0) (id ?n))
+	?boat <- (expected-cell (x ?x &~0 &~9 &~8) (y ?y &~0 &~9) (content middle))
+	?bottom-cell <- (expected-cell (x ?x2&:(eq ?x2 (+ ?x 1))) (y ?y) (content ?cont-bot &~bot &~water)) ; bottom
+	?left-cell <- (expected-cell (x ?x) (y ?y1&:(eq ?y1 (- ?y 1))) (content water)) ; left
+	?target <- (expected-cell (x ?target-x&:(eq ?target-x (+ ?x 2))) (y ?y))
+	(not (exec (action fire) (x ?target-x&:(eq ?target-x (+ ?x 2))) (y ?y)))
+	(not (agent-guess (x ?target-x&:(eq ?target-x (+ ?x 2))) (y ?y)))
+	(status (step ?s) (currently running))
+=>
+	(printout t "fire at (" (+ ?x 2) ", " ?y ")" crlf)
+	(modify ?fr (num (- ?fn 1)))
+	(assert (exec (step ?s) (action fire) (x (+ ?x 2)) (y ?y)))
+	(pop-focus)
+)
+
+(defrule fire-two-below-middle-if-right-is-water
+	(start-fire (yes true))
+	?fire-num <- (to-fire (num ?n))
+	?fr <- (fire-round (num ?fn &~0) (id ?n))
+	?boat <- (expected-cell (x ?x &~0 &~9 &~8) (y ?y &~0 &~9) (content middle))
+	?bottom-cell <- (expected-cell (x ?x2&:(eq ?x2 (+ ?x 1))) (y ?y) (content ?cont-bot &~bot &~water)) ; bottom
+	?right-cell <- (expected-cell (x ?x) (y ?y2&:(eq ?y2 (+ ?y 1))) (content water)) ; right
+	?target <- (expected-cell (x ?target-x&:(eq ?target-x (+ ?x 2))) (y ?y))
+	(not (exec (action fire) (x ?target-x&:(eq ?target-x (+ ?x 2))) (y ?y)))
+	(not (agent-guess (x ?target-x&:(eq ?target-x (+ ?x 2))) (y ?y)))
+	(status (step ?s) (currently running))
+=>
+	(printout t "fire at (" (+ ?x 2) ", " ?y ")" crlf)
+	(modify ?fr (num (- ?fn 1)))
+	(assert (exec (step ?s) (action fire) (x (+ ?x 2)) (y ?y)))
+	(pop-focus)
+)
+
+(defrule fire-two-right-if-left-cell-is-left
+	(start-fire (yes true))
+	?fire-num <- (to-fire (num ?n))
+	?fr <- (fire-round (num ?fn &~0) (id ?n))
+	?boat <- (expected-cell (x ?x &~0 &~9) (y ?y &~0 &~9 &~8) (content middle))
+	?left-cell <- (expected-cell (x ?x) (y ?y1&:(eq ?y1 (- ?y 1))) (content left)) ; left
+	?right-cell <- (expected-cell (x ?x) (y ?y2&:(eq ?y2 (+ ?y 1))) (content ?cont-right &~right &~water)) ; right
+	?target <- (expected-cell (x ?x) (y ?target-y&:(eq ?target-y (+ ?y 2))))
+	(not (exec (action fire) (x ?x) (y ?target-y&:(eq ?target-y (+ ?y 2)))))
+	(not (agent-guess (x ?x) (y ?target-y&:(eq ?target-y (+ ?y 2)))))
+	(status (step ?s) (currently running))
+=>
+	(printout t "fire at (" ?x ", " (+ ?y 2) ")" crlf)
+	(modify ?fr (num (- ?fn 1)))
+	(assert (exec (step ?s) (action fire) (x ?x) (y (+ ?y 2))))
+	(pop-focus)
+)
+
+(defrule fire-two-right-if-above-is-water
+	(start-fire (yes true))
+	?fire-num <- (to-fire (num ?n))
+	?fr <- (fire-round (num ?fn &~0) (id ?n))
+	?boat <- (expected-cell (x ?x &~0 &~9) (y ?y &~0 &~9 &~8) (content middle))
+	?top-cell <- (expected-cell (x ?x1&:(eq ?x1 (- ?x 1))) (y ?y) (content water)) ; top
+	?right-cell <- (expected-cell (x ?x) (y ?y2&:(eq ?y2 (+ ?y 1))) (content ?cont-right &~right &~water)) ; right
+	?target <- (expected-cell (x ?x) (y ?target-y&:(eq ?target-y (+ ?y 2))))
+	(not (exec (action fire) (x ?x) (y ?target-y&:(eq ?target-y (+ ?y 2)))))
+	(not (agent-guess (x ?x) (y ?target-y&:(eq ?target-y (+ ?y 2)))))
+	(status (step ?s) (currently running))
+=>
+	(printout t "fire at (" ?x ", " (+ ?y 2) ")" crlf)
+	(modify ?fr (num (- ?fn 1)))
+	(assert (exec (step ?s) (action fire) (x ?x) (y (+ ?y 2))))
+	(pop-focus)
+)
+
+(defrule fire-two-right-if-below-is-water
+	(start-fire (yes true))
+	?fire-num <- (to-fire (num ?n))
+	?fr <- (fire-round (num ?fn &~0) (id ?n))
+	?boat <- (expected-cell (x ?x &~0 &~9) (y ?y &~0 &~9 &~8) (content middle))
+	?bottom-cell <- (expected-cell (x ?x2&:(eq ?x2 (+ ?x 1))) (y ?y) (content water)) ; bottom
+	?right-cell <- (expected-cell (x ?x) (y ?y2&:(eq ?y2 (+ ?y 1))) (content ?cont-right &~right &~water)) ; right
+	?target <- (expected-cell (x ?x) (y ?target-y&:(eq ?target-y (+ ?y 2))))
+	(not (exec (action fire) (x ?x) (y ?target-y&:(eq ?target-y (+ ?y 2)))))
+	(not (agent-guess (x ?x) (y ?target-y&:(eq ?target-y (+ ?y 2)))))
+	(status (step ?s) (currently running))
+=>
+	(printout t "fire at (" ?x ", " (+ ?y 2) ")" crlf)
+	(modify ?fr (num (- ?fn 1)))
+	(assert (exec (step ?s) (action fire) (x ?x) (y (+ ?y 2))))
+	(pop-focus)
+)
+
+(defrule fire-two-left-if-right-cell-is-right
+	(start-fire (yes true))
+	?fire-num <- (to-fire (num ?n))
+	?fr <- (fire-round (num ?fn &~0) (id ?n))
+	?boat <- (expected-cell (x ?x &~0 &~9) (y ?y &~0 &~9 &~1) (content middle))
+	?left-cell <- (expected-cell (x ?x) (y ?y1&:(eq ?y1 (- ?y 1))) (content ?cont-left &~left &~water)) ; left
+	?right-cell <- (expected-cell (x ?x) (y ?y2&:(eq ?y2 (+ ?y 1))) (content right)) ; right
+	?target <- (expected-cell (x ?x) (y ?target-y&:(eq ?target-y (- ?y 2))))
+	(not (exec (action fire) (x ?x) (y ?target-y&:(eq ?target-y (- ?y 2)))))
+	(not (agent-guess (x ?x) (y ?target-y&:(eq ?target-y (- ?y 2)))))
+	(status (step ?s) (currently running))
+=>
+	(printout t "fire at (" ?x ", " (- ?y 2) ")" crlf)
+	(modify ?fr (num (- ?fn 1)))
+	(assert (exec (step ?s) (action fire) (x ?x) (y (- ?y 2))))
+	(pop-focus)
+)
+
+(defrule fire-two-left-if-above-is-water
+	(start-fire (yes true))
+	?fire-num <- (to-fire (num ?n))
+	?fr <- (fire-round (num ?fn &~0) (id ?n))
+	?boat <- (expected-cell (x ?x &~0 &~9) (y ?y &~0 &~9 &~1) (content middle))
+	?top-cell <- (expected-cell (x ?x1&:(eq ?x1 (- ?x 1))) (y ?y) (content water)) ; top
+	?left-cell <- (expected-cell (x ?x) (y ?y1&:(eq ?y1 (- ?y 1))) (content ?cont-left &~left &~water)) ; left
+	?target <- (expected-cell (x ?x) (y ?target-y&:(eq ?target-y (- ?y 2))))
+	(not (exec (action fire) (x ?x) (y ?target-y&:(eq ?target-y (- ?y 2)))))
+	(not (agent-guess (x ?x) (y ?target-y&:(eq ?target-y (- ?y 2)))))
+	(status (step ?s) (currently running))
+=>
+	(printout t "fire at (" ?x ", " (- ?y 2) ")" crlf)
+	(modify ?fr (num (- ?fn 1)))
+	(assert (exec (step ?s) (action fire) (x ?x) (y (- ?y 2))))
+	(pop-focus)
+)
+
+(defrule fire-two-left-if-below-is-water
+	(start-fire (yes true))
+	?fire-num <- (to-fire (num ?n))
+	?fr <- (fire-round (num ?fn &~0) (id ?n))
+	?boat <- (expected-cell (x ?x &~0 &~9) (y ?y &~0 &~9 &~1) (content middle))
+	?bottom-cell <- (expected-cell (x ?x2&:(eq ?x2 (+ ?x 1))) (y ?y) (content water)) ; bottom
+	?left-cell <- (expected-cell (x ?x) (y ?y1&:(eq ?y1 (- ?y 1))) (content ?cont-left &~left &~water)) ; left
+	?target <- (expected-cell (x ?x) (y ?target-y&:(eq ?target-y (- ?y 2))))
+	(not (exec (action fire) (x ?x) (y ?target-y&:(eq ?target-y (- ?y 2)))))
+	(not (agent-guess (x ?x) (y ?target-y&:(eq ?target-y (- ?y 2)))))
+	(status (step ?s) (currently running))
+=>
+	(printout t "fire at (" ?x ", " (- ?y 2) ")" crlf)
+	(modify ?fr (num (- ?fn 1)))
+	(assert (exec (step ?s) (action fire) (x ?x) (y (- ?y 2))))
 	(pop-focus)
 )
 
