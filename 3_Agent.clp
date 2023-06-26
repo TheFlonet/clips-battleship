@@ -1295,7 +1295,6 @@
 (defrule guess-known-ship
 	?boat-end <- (expected-cell (x ?row) (y ?col) (content ?cont &~water &~blank))
 	(not (agent-guess (x ?row) (y ?col)))
-	(not (exec (action fire) (x ?row) (y ?col)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 => 
@@ -1306,7 +1305,6 @@
 (defrule guess-side-of-known-left-ends
 	?boat-end <- (expected-cell (x ?row) (y ?col) (content left))
 	(not (agent-guess (x ?row) (y ?y&:(eq ?y (+ ?col 1)))))
-	(not (exec (action fire) (x ?row) (y ?y&:(eq ?y (+ ?col 1)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1317,7 +1315,6 @@
 (defrule guess-side-of-known-right-ends
 	?boat-end <- (expected-cell (x ?row) (y ?col) (content right))
 	(not (agent-guess (x ?row) (y ?y&:(eq ?y (- ?col 1)))))
-	(not (exec (action fire) (x ?row) (y ?y&:(eq ?y (- ?col 1)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1328,7 +1325,6 @@
 (defrule guess-side-of-known-top-ends
 	?boat-end <- (expected-cell (x ?row) (y ?col) (content top))
 	(not (agent-guess (x ?x&:(eq ?x (+ ?row 1))) (y ?col)))
-	(not (exec (action fire) (x ?x&:(eq ?x (+ ?row 1))) (y ?col)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1339,7 +1335,6 @@
 (defrule guess-side-of-known-bot-ends
 	?boat-end <- (expected-cell (x ?row) (y ?col) (content bot))
 	(not (agent-guess (x ?x&:(eq ?x (- ?row 1))) (y ?col)))
-	(not (exec (action fire) (x ?x&:(eq ?x (- ?row 1))) (y ?col)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1350,7 +1345,6 @@
 (defrule guess-left-side-of-middle-pieces-on-north-south-edge
 	?boat <- (expected-cell (x ?row &0|9) (y ?col) (content middle))
 	(not (agent-guess (x ?row) (y ?y&:(eq ?y (- ?col 1)))))
-	(not (exec (action fire) (x ?row) (y ?y&:(eq ?y (- ?col 1)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1361,7 +1355,6 @@
 (defrule guess-right-side-of-middle-pieces-on-north-south-edge
 	?boat <- (expected-cell (x ?row &0|9) (y ?col) (content middle))
 	(not (agent-guess (x ?row) (y ?y&:(eq ?y (+ ?col 1)))))
-	(not (exec (action fire) (x ?row) (y ?y&:(eq ?y (+ ?col 1)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1372,7 +1365,6 @@
 (defrule guess-top-side-of-middle-pieces-on-east-west-edge
 	?boat <- (expected-cell (x ?row) (y ?col &0|9) (content middle))
 	(not (agent-guess (x ?x&:(eq ?x (- ?row 1))) (y ?col))) 
-	(not (exec (action fire) (x ?x&:(eq ?x (- ?row 1))) (y ?col)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1383,7 +1375,6 @@
 (defrule guess-bottom-side-of-middle-pieces-on-east-west-edge
 	?boat <- (expected-cell (x ?row) (y ?col &0|9) (content middle))
 	(not (agent-guess (x ?x&:(eq ?x (+ ?row 1))) (y ?col)))
-	(not (exec (action fire) (x ?x&:(eq ?x (+ ?row 1))) (y ?col)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1395,7 +1386,6 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?x&:(eq ?x (- ?row 1))) (y ?col) (content water))
 	(not (agent-guess (x ?row) (y ?y&:(eq ?y (- ?col 1)))))
-	(not (exec (action fire) (x ?row) (y ?y&:(eq ?y (- ?col 1)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1407,7 +1397,6 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?x&:(eq ?x (- ?row 1))) (y ?col) (content water))
 	(not (agent-guess (x ?row) (y ?y&:(eq ?y (+ ?col 1)))))
-	(not (exec (action fire) (x ?row) (y ?y&:(eq ?y (+ ?col 1)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1419,7 +1408,6 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?x&:(eq ?x (+ ?row 1))) (y ?col) (content water))
 	(not (agent-guess (x ?row) (y ?y&:(eq ?y (- ?col 1)))))
-	(not (exec (action fire) (x ?row) (y ?y&:(eq ?y (- ?col 1)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1431,7 +1419,6 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?x&:(eq ?x (+ ?row 1))) (y ?col) (content water))
 	(not (agent-guess (x ?row) (y ?y&:(eq ?y (+ ?col 1)))))
-	(not (exec (action fire) (x ?row) (y ?y&:(eq ?y (+ ?col 1)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1443,7 +1430,6 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?row) (y ?y&:(eq ?y (- ?col 1))) (content water))
 	(not (agent-guess (x ?x&:(eq ?x (- ?row 1))) (y ?col)))
-	(not (exec (action fire) (x ?x&:(eq ?x (- ?row 1))) (y ?col)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1455,7 +1441,6 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?row) (y ?y&:(eq ?y (- ?col 1))) (content water))
 	(not (agent-guess (x ?x&:(eq ?x (+ ?row 1))) (y ?col)))
-	(not (exec (action fire) (x ?x&:(eq ?x (+ ?row 1))) (y ?col)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1467,7 +1452,6 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?row) (y ?y&:(eq ?y (+ ?col 1))) (content water))
 	(not (agent-guess (x ?x&:(eq ?x (- ?row 1))) (y ?col)))
-	(not (exec (action fire) (x ?x&:(eq ?x (- ?row 1))) (y ?col)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1479,7 +1463,6 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?row) (y ?y&:(eq ?y (+ ?col 1))) (content water))
 	(not (agent-guess (x ?x&:(eq ?x (+ ?row 1))) (y ?col)))
-	(not (exec (action fire) (x ?x&:(eq ?x (+ ?row 1))) (y ?col)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1491,7 +1474,6 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?row) (y ?y&:(eq ?y (+ ?col 1))) (content ?cont &~water &~blank))
 	(not (agent-guess (x ?row) (y ?guess-y&:(eq ?guess-y (- ?col 1)))))
-	(not (exec (action fire) (x ?row) (y ?guess-y&:(eq ?guess-y (- ?col 1)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1503,7 +1485,6 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?row) (y ?y&:(eq ?y (- ?col 1))) (content ?cont &~water &~blank))
 	(not (agent-guess (x ?row) (y ?guess-y&:(eq ?guess-y (+ ?col 1)))))
-	(not (exec (action fire) (x ?row) (y ?guess-y&:(eq ?guess-y (+ ?col 1)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1515,7 +1496,6 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?x&:(eq ?x (- ?row 1))) (y ?col) (content ?cont &~water &~blank))
 	(not (agent-guess (x ?guess-x&:(eq ?guess-x (+ ?row 1))) (y ?col)))
-	(not (exec (action fire) (x ?guess-x&:(eq ?guess-x (+ ?row 1))) (y ?col)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1527,7 +1507,6 @@
 	?boat <- (expected-cell (x ?row &~0 &~9) (y ?col &~0 &~9) (content middle))
 	?other-cell <- (expected-cell (x ?x&:(eq ?x (+ ?row 1))) (y ?col) (content ?cont &~water &~blank))
 	(not (agent-guess (x ?guess-x&:(eq ?guess-x (- ?row 1))) (y ?col)))
-	(not (exec (action fire) (x ?guess-x&:(eq ?guess-x (- ?row 1))) (y ?col)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1981,7 +1960,6 @@
 	(moves (fires 0))
 	?cell <- (expected-cell (x ?x) (y ?y &~8 &~9) (content left))
 	(not (agent-guess (x ?x) (y ?y1&:(eq ?y1 (+ 2 ?y)))))
-	(not (exec (action fire) (x ?x) (y ?y1&:(eq ?y1 (+ 2 ?y)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -1993,7 +1971,6 @@
 	(moves (fires 0))
 	?cell <- (expected-cell (x ?x) (y ?y &~0 &~1) (content right))
 	(not (agent-guess (x ?x) (y ?y1&:(eq ?y1 (- ?y 2)))))
-	(not (exec (action fire) (x ?x) (y ?y1&:(eq ?y1 (- ?y 2)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -2005,7 +1982,6 @@
 	(moves (fires 0))
 	?cell <- (expected-cell (x ?x &~8 &~9) (y ?y) (content top))
 	(not (agent-guess (x ?x1&:(eq ?x1 (+ 2 ?x))) (y ?y)))
-	(not (exec (action fire) (x ?x1&:(eq ?x1 (+ 2 ?x))) (y ?y)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -2017,7 +1993,6 @@
 	(moves (fires 0))
 	?cell <- (expected-cell (x ?x &~0 &~1) (y ?y) (content bot))
 	(not (agent-guess (x ?x1&:(eq ?x1 (- ?x 2))) (y ?y)))
-	(not (exec (action fire) (x ?x1&:(eq ?x1 (- ?x 2))) (y ?y)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -2033,7 +2008,6 @@
 	?left-cell <- (expected-cell (x ?x) (y ?y1&:(eq ?y1 (- ?y 1))) (content blank)) ; left
 	?right-cell <- (expected-cell (x ?x) (y ?y2&:(eq ?y2 (+ ?y 1))) (content blank)) ; right
 	(not (agent-guess (x ?x1&:(eq ?x1 (- ?x 1))) (y ?y)))
-	(not (exec (action fire) (x ?x1&:(eq ?x1 (- ?x 1))) (y ?y)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -2049,7 +2023,6 @@
 	?left-cell <- (expected-cell (x ?x) (y ?y1&:(eq ?y1 (- ?y 1))) (content blank)) ; left
 	?right-cell <- (expected-cell (x ?x) (y ?y2&:(eq ?y2 (+ 1 ?y))) (content blank)) ; right
 	(not (agent-guess (x ?x1&:(eq ?x1 (+ 1 ?x))) (y ?y)))
-	(not (exec (action fire) (x ?x1&:(eq ?x1 (+ 1 ?x))) (y ?y)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -2065,7 +2038,6 @@
 	?left-cell <- (expected-cell (x ?x) (y ?y1&:(eq ?y1 (- ?y 1))) (content blank)) ; left
 	?right-cell <- (expected-cell (x ?x) (y ?y2&:(eq ?y2 (+ 1 ?y))) (content blank)) ; right
 	(not (agent-guess (x ?x) (y ?y1&:(eq ?y1 (- ?y 1)))))
-	(not (exec (action fire) (x ?x) (y ?y1&:(eq ?y1 (- ?y 1)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -2081,7 +2053,6 @@
 	?left-cell <- (expected-cell (x ?x) (y ?y1&:(eq ?y1 (- ?y 1))) (content blank)) ; left
 	?right-cell <- (expected-cell (x ?x) (y ?y2&:(eq ?y2 (+ 1 ?y))) (content blank)) ; right
 	(not (agent-guess (x ?x) (y ?y1&:(eq ?y1 (+ 1 ?y)))))
-	(not (exec (action fire) (x ?x) (y ?y1&:(eq ?y1 (+ 1 ?y)))))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
@@ -2093,7 +2064,6 @@
 	(moves (fires 0))
 	?cell <- (expected-cell (x ?x) (y ?y) (content blank))
 	(not (agent-guess (x ?x) (y ?y)))
-	(not (exec (action fire) (x ?x) (y ?y)))
 	?num <- (to-guess (num ?guess-num))
 	?curr <- (agent-guess (num ?guess-num))
 =>
