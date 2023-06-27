@@ -37,17 +37,17 @@
     \begin{table}
         \begin{tabular}{|l|l|l|l|l|l|l|l|l|l||l|}
         \hline
-         &  &  &  &  &  &  &  &  &  & \\ \hline
-         &  &  &  &  &  & $\subset$ & $\supset$ &  &  & \\ \hline
-         &  &  &  &  &  &  &  &  &  & \\ \hline
-         &  &  &  &  &  &  &  &  &  & \\ \hline
-         &  & $\Circle$ &  &  &  &  &  &  &  & \\ \hline
-         &  &  &  &  &  & $\cap$ &  &  &  & \\ \hline
-         &  &  &  &  &  & $\cup$ &  &  &  & \\ \hline
-         &  &  &  &  &  &  &  &  &  & \\ \hline
-         &  &  &  &  &  &  &  &  &  & \\ \hline
-         &  &  &  &  & $\square$ &  &  &  &  & \\ \hline \hline
-         &  &  &  &  &  &  &  &  &  & \\ \hline
+         $\Circle$ &  &  &  &  &  &  & $\subset$ & $\square$ & $\supset$ & 4 \\ \hline
+         &  &  &  &  & $\cap$ &  &  &  &  & 1 \\ \hline
+         &  &  &  &  & $\cup$ &  &  & $\Circle$ &  & 2 \\ \hline
+         &  &  &  &  &  &  &  &  &  & 0 \\ \hline
+         &  &  &  &  & $\cap$ &  &  &  &  & 1 \\ \hline
+         &  & $\subset$ & $\supset$ &  & $\square$ &  & $\subset$ & $\square$ & $\supset$ & 6 \\ \hline
+         &  &  &  &  & $\square$ &  &  &  &  & 1 \\ \hline
+         &  &  &  &  & $\cup$ &  &  &  &  & 1 \\ \hline
+         $\cap$ &  &  &  &  &  &  &  & $\Circle$ &  & 2 \\ \hline
+         $\cup$ &  &  &  &  & $\Circle$ &  &  &  &  & 2 \\ \hline \hline
+         3 & 0 & 1 & 1 & 0 & 7 & 0 & 2 & 4 & 2 & \\ \hline
         \end{tabular}
     \end{table}
 \end{frame}
@@ -128,18 +128,52 @@
         \begin{axis}[
             xlabel={Casi},
             ylabel={Punteggi},
-            xmin=1, xmax=5,
-            ymin=-500, ymax=500,
-            xtick={1,2,3,4,5},
-            % ytick={0,20,40,60,80,100,120},
+            xmin=1, xmax=6,
+            ymin=-150, ymax=200,
+            xtick={1,2,3,4,5,6},
             ymajorgrids=true,
             grid style=dashed,
+            legend pos=north west,
         ]
         
             \addplot[color=blue, mark=square]
-            coordinates {(1, 50)(2, 50)(3, 50)(4, 50)(5, 50)};
+            coordinates {
+                (1, -145)
+                (2, -145)
+                (3, 85)
+                (4, 30)
+                (5, 155)
+                (6, 175)
+            };
+            \addlegendentry{$\langle 1, 1, 1, 1, 1 \rangle$}
+            \addplot[color=green, mark=square]
+            coordinates {
+                (1, -125)
+                (2, -125)
+                (3, 70)
+                (4, -45)
+                (5, 120)
+                (6, 160)
+            };
+            \addlegendentry{$\langle 3, 2 \rangle$}
+            \addplot[color=red, mark=square]
+            coordinates {
+                (1, -125)
+                (2, -125)
+                (3, 70)
+                (4, 30)
+                (5, 120)
+                (6, 160)
+            };
+            \addlegendentry{$\langle 5 \rangle$}
         \end{axis}
     \end{tikzpicture}
+\end{frame}
+
+\begin{frame}[noframenumbering]
+    \frametitle{Extra}
+
+    Ulteriori test con i relativi risultati sono riportati nel file allegato.
 \end{frame}
 
 \end{document}
