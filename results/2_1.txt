@@ -1,0 +1,42 @@
+         CLIPS (6.4.1 4/8/23)
+CLIPS> (load 0_Main.clp)
++%%%%****$
+TRUE
+CLIPS> (load 1_Env.clp)
++%%%%%%**************!*********
+TRUE
+CLIPS> (load maps/2_Map_c1_obv1.clp)
+$
+TRUE
+CLIPS> (load agents/3_Agent_b.clp)
++%$****************************************************%%$************************%%%$*********************************
+TRUE
+CLIPS> (reset)
+CLIPS> (run)
+fire at (9, 9)
+fire at (0, 0)
+fire at (0, 2)
+fire at (9, 8)
+fire at (0, 3)
+agent-guess(7, 0) - 19
+agent-guess(7, 2) - 18
+agent-guess(7, 3) - 17
+agent-guess(7, 5) - 16
+agent-guess(7, 7) - 15
+agent-guess(7, 8) - 14
+agent-guess(7, 9) - 13
+agent-guess(8, 0) - 12
+agent-guess(8, 2) - 11
+agent-guess(8, 3) - 10
+agent-guess(8, 5) - 9
+agent-guess(8, 7) - 8
+agent-guess(8, 8) - 7
+agent-guess(8, 9) - 6
+agent-guess(9, 0) - 5
+agent-guess(9, 2) - 4
+agent-guess(9, 3) - 3
+agent-guess(9, 5) - 2
+agent-guess(9, 7) - 1
+agent-guess(0, 0) - 0
+Your score is -125
+CLIPS> (exit)
